@@ -11,7 +11,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^7.8.0",
     "cors": "^2.8.6",
@@ -20,6 +19,7 @@
     "helmet": "^8.2.0",
     "morgan": "^1.11.0",
     "multer": "^2.2.0",
+    "nodemon": "^3.1.14",
     "zod": "^4.4.3"
   },
   "devDependencies": {
