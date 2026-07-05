@@ -5,7 +5,7 @@ export const healthCheck = (_req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     status: "OK",
-    service: "AI Markdown Notes API",
+    service: "AI Markdown Distiller",
     version: "v1",
     timestamp: new Date().toISOString(),
   });

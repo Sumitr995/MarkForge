@@ -1,20 +1,36 @@
+import path from "path";
+
 import { UploadedFile } from "../../common/types/file.types";
+
 import { ApiError } from "../../common/errors/api-error";
+
 import { markdownService } from "../markdown/markdown.service";
+
+import { deleteFile } from "../../common/utils/file";
 
 class DocumentService {
   async processUpload(file?: UploadedFile) {
     if (!file) {
-      throw new ApiError(400, "PDF file required");
+      throw new ApiError(
+        400,
+
+        "PDF file required",
+      );
     }
 
-    const markdown = await markdownService.convertPdfToMarkdown(file.path);
+    const filePath = path.resolve(file.path);
 
-    return {
-      originalName: file.originalname,
+    try {
+      const markdown = await markdownService.convertPdfToMarkdown(filePath);
 
-      markdown,
-    };
+      return {
+        originalName: file.originalname,
+
+        markdown,
+      };
+    } finally {
+      await deleteFile(filePath);
+    }
   }
 }
 
