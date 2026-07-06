@@ -1,3 +1,14 @@
+# dependencies
 node_modules/
-.venv/
+
+# env
 .env
+
+# python
+python/.venv/
+
+# temp uploads
+backend/uploads/temp/
+
+# build
+dist/

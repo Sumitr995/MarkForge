@@ -1,12 +1,10 @@
 import path from "path";
 
 import { UploadedFile } from "../../common/types/file.types";
-
 import { ApiError } from "../../common/errors/api-error";
-
 import { markdownService } from "../markdown/markdown.service";
-
 import { deleteFile } from "../../common/utils/file";
+import { aiService } from "../ai/ai.service";
 
 class DocumentService {
   async processUpload(file?: UploadedFile) {
@@ -21,12 +19,14 @@ class DocumentService {
     const filePath = path.resolve(file.path);
 
     try {
-      const markdown = await markdownService.convertPdfToMarkdown(filePath);
+      const rawMarkdown = await markdownService.convertPdfToMarkdown(filePath);
+
+      const enhancedMarkdown = await aiService.generateNotes(rawMarkdown);
 
       return {
         originalName: file.originalname,
 
-        markdown,
+        markdown: enhancedMarkdown,
       };
     } finally {
       await deleteFile(filePath);

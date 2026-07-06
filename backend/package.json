@@ -12,7 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ai-sdk/groq": "^4.0.5",
+    "@ai-sdk/openai": "^4.0.8",
     "@prisma/client": "^7.8.0",
+    "ai": "^7.0.15",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
