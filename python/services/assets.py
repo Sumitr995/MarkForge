@@ -3,7 +3,7 @@ import os
 import uuid
 
 
-OUTPUT_DIR = "assets/extracted"
+OUTPUT_DIR = "assets"
 def extract_assets(
     file_path: str
 ):

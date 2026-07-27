@@ -6,8 +6,11 @@
 MarkForge/
 ├── backend/          Express 5 + TypeScript API
 ├── frontend/         React 19 + Vite 8 + TypeScript UI (Vite starter, not yet customized)
-└── python/           Python virtual env + MarkItDown PDF-to-Markdown script
+├── python/           Python virtual env + MarkItDown PDF-to-Markdown script
+└── Context/          Project documentation (read these first)
 ```
+
+Read `Context/PROJECT.md` and `Context/ARCHITECTURE.md` before making changes.
 
 ## Useful commands
 

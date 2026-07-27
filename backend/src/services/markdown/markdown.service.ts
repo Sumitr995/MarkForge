@@ -3,11 +3,13 @@ import { promisify } from "util";
 import path from "path";
 
 import { ApiError } from "../../common/errors/api-error";
+import { ExtractionResult } from "../../common/types/file.types";
+
 
 const execFileAsync = promisify(execFile);
 
 class MarkdownService {
-  async convertPdfToMarkdown(filePath: string): Promise<string> {
+  async convertPdfToMarkdown(filePath: string): Promise<ExtractionResult> {
     try {
       const pythonPath = path.resolve(
         process.cwd(),
@@ -35,7 +37,13 @@ class MarkdownService {
         throw new Error(result.error);
       }
 
-      return result.markdown;
+      // Return the markdown and assets, ensuring assets is an array even if it's undefined
+      return {
+        markdown: result.markdown,
+        assets: result.assets ?? [],
+      };
+
+
     } catch (error) {
       console.error("MARKDOWN ERROR:", error);
 

@@ -1,6 +1,6 @@
 import path from "path";
 
-import { UploadedFile } from "../../common/types/file.types";
+import { UploadedFile, ExtractionResult } from "../../common/types/file.types";
 import { ApiError } from "../../common/errors/api-error";
 import { markdownService } from "../markdown/markdown.service";
 import { deleteFile } from "../../common/utils/file";
@@ -19,14 +19,17 @@ class DocumentService {
     const filePath = path.resolve(file.path);
 
     try {
-      const rawMarkdown = await markdownService.convertPdfToMarkdown(filePath);
+      const extraction = await markdownService.convertPdfToMarkdown(filePath);
 
-      const enhancedMarkdown = await aiService.generateNotes(rawMarkdown);
+const enhancedMarkdown =
+  await aiService.generateNotes(extraction.markdown);
 
       return {
         originalName: file.originalname,
 
         markdown: enhancedMarkdown,
+
+        assets: extraction.assets
       };
     } finally {
       await deleteFile(filePath);
