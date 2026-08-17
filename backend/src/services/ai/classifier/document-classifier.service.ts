@@ -1,6 +1,7 @@
 import { generateText } from "ai";
 
 import { groq } from "@ai-sdk/groq";
+import { env } from "../../../config/env";
 
 export type DocumentType =
   | "research_paper"
@@ -13,7 +14,7 @@ export type DocumentType =
 class DocumentClassifierService {
   async classify(markdown: string): Promise<DocumentType> {
     const response = await generateText({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groq(env.GROQ_MODEL),
 
       temperature: 0,
 

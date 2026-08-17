@@ -7,5 +7,9 @@ export const env = {
   NODE_ENV: process.env.NODE_ENV || "development",
   DATABASE_URL: process.env.DATABASE_URL || "",
   GROQ_API_KEY: process.env.GROQ_API_KEY || "",
+  GROQ_MODEL: process.env.GROQ_MODEL || "openai/gpt-oss-120b",
   OPENAI_API_KEY: process.env.OPENAI_API_KEY || "",
+  PYTHON_PATH: process.env.PYTHON_PATH || "",
+  ASSETS_DIR: process.env.ASSETS_DIR || "",
+  ASSET_RETENTION_MS: Number(process.env.ASSET_RETENTION_MS) || 60_000,
 };
