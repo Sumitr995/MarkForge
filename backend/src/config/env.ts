@@ -11,5 +11,5 @@ export const env = {
   OPENAI_API_KEY: process.env.OPENAI_API_KEY || "",
   PYTHON_PATH: process.env.PYTHON_PATH || "",
   ASSETS_DIR: process.env.ASSETS_DIR || "",
-  ASSET_RETENTION_MS: Number(process.env.ASSET_RETENTION_MS) || 60_000,
+  ASSET_RETENTION_MS: Number(process.env.ASSET_RETENTION_MS) || 24 * 60 * 60 * 1000, // 24h — keep extracted images readable for a day
 };

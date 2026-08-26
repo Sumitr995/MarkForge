@@ -1,5 +1,6 @@
 import { useDocumentStore } from "@/stores/document-store";
 import { MarkdownView } from "@/components/reader/markdown-view";
+import { Gallery } from "@/components/reader/gallery";
 import { TOC, extractToc } from "@/components/reader/toc";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -96,12 +97,7 @@ export default function ReaderPage() {
         <aside className="hidden lg:block"><TOC items={toc} /></aside>
         <div className="min-w-0 rounded-[4px] border border-hairline bg-canvas p-5 sm:p-8">
           <MarkdownView markdown={markdown} />
-          {doc?.assets?.length ? (
-            <div className="mt-8 rounded-[4px] border border-hairline bg-surface-soft p-3">
-              <div className="font-mono text-[11px] tracking-wide uppercase text-mute">Extracted figures — {doc.assets.length}</div>
-              <ul className="mt-2 space-y-1 font-mono text-[12px] text-body">{doc.assets.map((a, i) => (<li key={i} className="flex items-center justify-between border-b border-hairline last:border-0 py-1"><span className="truncate pr-2">{a.path}</span><span className="text-mute shrink-0">p.{a.page}</span></li>))}</ul>
-            </div>
-          ) : null}
+          {doc?.assets?.length ? <Gallery assets={doc.assets} /> : null}
         </div>
       </div>
 

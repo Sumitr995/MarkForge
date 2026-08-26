@@ -95,12 +95,14 @@ Multer errors (wrong file type, too large) and validation errors follow the same
 | Service | File | Responsibility |
 |---|---|---|
 | **DocumentService** | `services/document/document.service.ts` | Orchestrates upload workflow: extract → AI enhance → cleanup |
-| **MarkdownService** | `services/markdown/markdown.service.ts` | Python bridge: spawns convert.py, parses JSON result |
-| **AIService** | `services/ai/ai.service.ts` | AI orchestration: classify → preprocess → chunk → Groq → join |
+| **MarkdownService** | `services/markdown/markdown.service.ts` | Python bridge: spawns convert.py (cross-platform), parses JSON |
+| **AIService** | `services/ai/ai.service.ts` | AI orchestration: classify → analyze → clean → chunk → Groq → merge |
 | **DocumentClassifier** | `services/ai/classifier/` | Detects document type via Groq (research_paper, book, etc.) |
+| **DocumentAnalyzer** | `services/ai/analyzer/` | Title, headings, tables, image count, token estimate |
+| **SectionParser** | `services/ai/parser/` | Splits markdown into sections by heading |
 | **MarkdownPreprocessor** | `services/ai/preprocess/` | Normalizes whitespace before chunking |
 | **ChunkService** | `services/ai/chunk/` | Fixed-size 8000-char splitting |
-| **MergeService** | `services/ai/merge/` | 🗂️ Stub — planned for chunk reassembly |
+| **MergeService** | `services/ai/merge/` | 🗂️ Stub — neat `\n\n` join (heading-aware next) |
 | **PromptRouter** | `services/ai/prompt-router.ts` | Routes document type to specialized prompt template |
 | **UploadMiddleware** | `middleware/upload.middleware.ts` | Multer config: PDF-only filter, 20 MB limit, disk storage |
 | **ErrorMiddleware** | `middleware/error.middleware.ts` | Centralized error handler → JSON response |
@@ -111,18 +113,20 @@ Multer errors (wrong file type, too large) and validation errors follow the same
 
 ```
 DocumentService
-├── MarkdownService ──── Python (child_process)
+├── MarkdownService ──── Python (child_process.execFile)
 │                            ├── services/markdown.py (MarkItDown)
-│                            └── services/assets.py (PyMuPDF)
+│                            └── services/assets.py (PyMuPDF, configurable dir)
 └── AIService
     ├── DocumentClassifier ──── Groq
+    ├── DocumentAnalyzer
+    ├── SectionParser
     ├── MarkdownPreprocessor
     ├── ChunkService
     ├── PromptRouter ──── 6 prompt templates
     └── MergeService 🗂️
 ```
 
-## Current AI Pipeline
+## Current AI Pipeline (Enhanced)
 
 ```
 Markdown (from ExtractionResult)
@@ -131,7 +135,13 @@ Markdown (from ExtractionResult)
 DocumentClassifier → document type (research_paper, book, ...)
   │
   ▼
+DocumentAnalyzer → title, headings, tables, images, tokens
+  │
+  ▼
 MarkdownPreprocessor → normalize whitespace, trim
+  │
+  ▼
+SectionParser → sections by heading
   │
   ▼
 ChunkService → fixed 8000-char splits (can split mid-sentence)
@@ -139,11 +149,11 @@ ChunkService → fixed 8000-char splits (can split mid-sentence)
   ▼
 For each chunk:
   ├── PromptRouter → select type-specific prompt template
-  ├── Groq (llama-3.3-70b-versatile) → AI response
+  ├── Groq (llama-3.3-70b via Vercel AI SDK) → AI response
   └── Collect result
   │
   ▼
-Join responses with \n\n
+MergeService → neat \n\n join (heading-aware next)
   │
   ▼
 Enhanced markdown
@@ -206,7 +216,7 @@ src/
 ├── server.ts                         Entry point
 ├── app.ts                            Express app setup (helmet, cors, morgan, routes, error middleware)
 ├── config/
-│   └── env.ts                        dotenv → PORT, NODE_ENV, DATABASE_URL, GROQ_API_KEY, OPENAI_API_KEY
+│   └── env.ts                        dotenv → PORT, NODE_ENV, DATABASE_URL, GROQ_API_KEY, OPENAI_API_KEY, PYTHON_PATH, ASSETS_DIR
 ├── routes/
 │   ├── index.ts                      Mounts /health, /documents under /api/v1
 │   ├── health.routes.ts              GET /api/v1/health (with Zod body validation)
@@ -221,18 +231,22 @@ src/
 │   ├── document/
 │   │   └── document.service.ts       Orchestrates: extract → AI enhance → cleanup temp file
 │   ├── markdown/
-│   │   └── markdown.service.ts       Python bridge → parse JSON → ExtractionResult
+│   │   └── markdown.service.ts       Python bridge (cross-platform) → parse JSON → ExtractionResult
 │   └── ai/
-│       ├── ai.service.ts             AI orchestration: classify → preprocess → chunk → Groq → join
+│       ├── ai.service.ts             AI orchestration: classify → analyze → clean → chunk → Groq → merge
 │       ├── prompt-router.ts          Routes document type to specialized prompt
 │       ├── classifier/
 │       │   └── document-classifier.service.ts  Groq-based: research_paper, book, study_notes, etc.
+│       ├── analyzer/
+│       │   └── document-analyzer.service.ts    Title, headings, tables, tokens
+│       ├── parser/
+│       │   └── section-parser.service.ts       Sections by heading
 │       ├── preprocess/
-│       │   └── markdown-cleaner.service.ts     AI Markdown Preprocessor — normalizes whitespace
+│       │   └── markdown-cleaner.service.ts     Normalizes whitespace
 │       ├── chunk/
-│       │   └── chunk.service.ts      Fixed 8000-char splits (📋 semantic chunking planned)
+│       │   └── chunk.service.ts      Fixed 8000-char splits (semantic next)
 │       ├── merge/
-│       │   └── merge.service.ts      🗂️ Stub — reassembles AI chunk outputs
+│       │   └── merge.service.ts      🗂️ Stub — neat \n\n join
 │       └── prompts/
 │           ├── base.prompt.ts
 │           ├── book.prompt.ts
@@ -263,13 +277,40 @@ src/
 ```
 python/
 ├── scripts/
-│   └── convert.py                    Entry point: parses args, calls services, prints JSON to stdout
+│   └── convert.py                    Entry point: parses args (pdf_path, assets_dir), calls services, prints JSON
 ├── services/
 │   ├── markdown.py                   extract_markdown(file_path) → MarkItDown → text_content
-│   └── assets.py                     extract_assets(file_path) → PyMuPDF → image extraction → Asset[]
-├── assets/                           Extracted images land here (relative to CWD, 📋 should be configurable)
+│   └── assets.py                     extract_assets(file_path, assets_dir) → PyMuPDF → Asset[]
+├── assets/                           Configurable via env ASSETS_DIR (default uploads/assets)
 ├── .venv/                            Python virtual environment
-└── requirements.txt                  markitdown, PyMuPDF
+└── requirements.txt                  markitdown 0.1.6, PyMuPDF 1.28, + deps
+```
+
+## Frontend Folder Structure (Vite + React + bun)
+
+```
+frontend/
+├── index.html                        SEO, OG, noscript, theme flash script
+├── vite.config.ts                    @ alias, /api proxy, manualChunks vendor/motion/markdown
+├── vercel.json / Dockerfile / nginx.conf  Deploy artifacts
+├── src/
+│   ├── main.tsx                      ThemeProvider + App
+│   ├── App.tsx                       Router /, /app, /reader, /docs + ErrorBoundary
+│   ├── styles/index.css              @theme tokens (DESIGN.md) + html.dark overrides
+│   ├── lib/
+│   │   ├── constants.ts              API_BASE (env-driven), CURL_EXAMPLE, GUEST_LIMIT
+│   │   ├── api.ts                    uploadPdf (120s + abort, 413/429), checkHealth
+│   │   ├── theme.tsx                 system/light/dark provider
+│   │   └── utils.ts                  cn()
+│   ├── hooks/                        use-mobile, use-gsap
+│   ├── stores/document-store.ts      Zustand { doc, setDoc }
+│   ├── components/
+│   │   ├── ui/                       button/badge/card/input/separator/theme-toggle/error-boundary
+│   │   ├── layout/                   navbar (MF logo + health dot + theme), footer (solo Sumitr995 + avatar), layout
+│   │   ├── sections/                 hero, features, why-markitdown, pipeline, showcase, trust, faq, cta (+ pricing/testimonials hidden)
+│   │   └── reader/                   dropzone, markdown-view (slug ids + highlight), toc
+│   └── pages/                        home, app, reader, docs
+└── DESIGN.md                         Mono design system (Berkeley Mono → JetBrains, cream #fdfcfc, 4px)
 ```
 
 ## Design Principles

@@ -24,38 +24,38 @@ The health check route applies `validate({ body: healthSchema })` despite being 
 
 **Status:** Minor — should be removed or changed to query validation.
 
-## 5. Python venv path is hardcoded (Windows)
+## 5. Python venv path is hardcoded (Windows) — FIXED
 
-`markdown.service.ts` hardcodes `../python/.venv/Scripts/python.exe`. This will fail on non-Windows systems and breaks if the venv is relocated.
+`markdown.service.ts:21` now detects `win32` vs `bin/python` and respects `PYTHON_PATH` env. `convert.py` accepts `assets_dir` arg.
 
-**Status:** Needs cross-platform support (e.g., detect OS or use a config/env variable).
+**Status:** ✅ Resolved — cross-platform + configurable.
 
 ## 6. Prisma is a dependency but not set up
 
 `@prisma/client` and `prisma` are in `package.json` but no schema, migrations, or client exist. Any code importing Prisma will fail at runtime.
 
-**Status:** Need `npx prisma init` and schema design before use.
+**Status:** `npx prisma init` before DB use — still stub, not blocking MVP (no DB yet).
 
 ## 7. No tests anywhere
 
-There are no unit, integration, or E2E tests configured. The current testing approach is manual (running the dev server and hitting endpoints).
+There are no unit, integration, or E2E tests configured. Manual dev-server testing only.
 
-**Status:** Testing strategy needs to be defined.
+**Status:** Still open — define strategy post-MVP.
 
-## 8. Frontend is a default Vite starter template
+## 8. Frontend is a default Vite starter template — FIXED
 
-The frontend directory contains the out-of-the-box Vite React template — no custom MarkForge UI has been built yet. Dependencies like `react-markdown`, `react-router-dom`, and `lucide-react` are installed but not used.
+Now Vite 6 + React 19 + Tailwind 4 + shadcn, mono DESIGN.md, theme toggler, landing + reader shipped.
 
-**Status:** Frontend development hasn't started.
+**Status:** ✅ Done — see `Context/FRONTEND.md`.
 
-## 9. Asset extraction outputs to CWD
+## 9. Asset extraction outputs to CWD — FIXED
 
-`assets.py` writes extracted images to an `assets/` directory relative to the Python script's current working directory, not a configured output path. This can scatter files depending on where the backend spawns the process.
+`markdown.service.ts:17` `ASSETS_DIR = env.ASSETS_DIR || uploads/assets`, `document.service.ts:10` uses `uploads/temp/assets`, `convert.py` takes `assets_dir`. No CWD scatter.
 
-**Status:** Should use a configurable temp directory.
+**Status:** ✅ Resolved — configurable.
 
 ## 10. No CI/CD pipeline
 
-No GitHub Actions workflows or CI configuration exists. There's no automated linting, type-checking, or testing on push/PR.
+No GitHub Actions yet.
 
-**Status:** Needed once testing is in place.
+**Status:** Still open — add after tests.

@@ -6,6 +6,7 @@ import { ApiError } from "../../common/errors/api-error";
 import { markdownService } from "../markdown/markdown.service";
 import { deleteFile } from "../../common/utils/file";
 import { aiService } from "../ai/ai.service";
+import { env } from "../../config/env";
 
 const ASSETS_DIR = path.join(process.cwd(), "uploads", "temp", "assets");
 
@@ -65,7 +66,11 @@ class DocumentService {
   private absoluteToUrl(absolutePath: string): string {
     const uploadsRoot = path.join(process.cwd(), "uploads");
     const relative = path.relative(uploadsRoot, absolutePath);
-    return "/uploads/" + relative.split(path.sep).join("/");
+    const relUrl = "/uploads/" + relative.split(path.sep).join("/");
+    // simple direct link — frontend can use as-is
+    // in prod set BACKEND_URL=https://api.markforge.app, locally http://localhost:5000
+    const base = process.env.BACKEND_URL || `http://localhost:${env.PORT}`;
+    return `${base}${relUrl}`;
   }
 }
 

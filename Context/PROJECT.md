@@ -51,37 +51,38 @@ PDF → Knowledge Extraction → Markdown Conversion → Document Understanding 
 |---|---|
 | Backend Foundation (Express, TypeScript, error handling) | ✅ Complete |
 | Upload Pipeline (Multer, validation, temp files) | ✅ Complete |
-| Node ↔ Python Bridge | ✅ Complete |
+| Node ↔ Python Bridge (cross-platform) | ✅ Complete |
 | MarkItDown Integration | ✅ Complete |
-| AI Integration (Groq) | ✅ Complete |
-| Document Classification | ✅ Complete |
-| Prompt Routing | ✅ Complete |
+| AI Integration (Groq llama-3.3-70b) | ✅ Complete |
+| Document Classification (6 types) | ✅ Complete |
+| Prompt Routing (6 templates) | ✅ Complete |
 | Fixed-size Chunking (8000 chars) | ✅ Complete |
-| AI Markdown Preprocessor (cleaner) | ✅ Complete |
-| Asset Extraction Foundation (PyMuPDF) | ✅ Complete |
+| AI Markdown Preprocessor + Analyzer | ✅ Complete |
+| Asset Extraction (PyMuPDF, configurable dir) | ✅ Complete |
 | ExtractionResult Interface | ✅ Complete |
-| Semantic Chunking | 📋 Planned |
-| Merge Service | 🗂️ Stub |
-| Rich Asset Processing (images, diagrams, metadata) | 📋 Planned |
-| Frontend Reader | ❌ Not Started |
+| Frontend MVP — Vite + React + Tailwind + shadcn | ✅ Complete |
+| Theme (system/light/dark) + Solo Maker UX | ✅ Complete |
+| Reader (TOC, markdown, copy/export, health dot) | ✅ Complete |
+| Deploy Artifacts (Docker, nginx, Vercel) | ✅ Complete |
+| Semantic Chunking | 🚧 Next |
+| Merge Service (heading-aware stitching) | 🗂️ Stub (neat \n\n now) |
+| Rich Asset Viewer (images, Mermaid) | 📋 Planned |
 
 ## Current Limitations
 
-- Large documents may exceed Groq free-tier limits (mitigated by 8000-char chunks)
-- Fixed-size chunking can split content mid-sentence or mid-section
-- Merge service is a stub — AI chunk outputs concatenated naively with `\n\n`
-- Python venv path hardcoded to Windows (`../python/.venv/Scripts/python.exe`)
-- No database (Prisma dependency exists without schema)
-- No tests configured
-- Asset extraction outputs to CWD, not a configured temp directory
-- No CI/CD pipeline
+- Fixed-size chunking can split mid-sentence — semantic chunking next
+- Merge is neat `\n\n` join — coherent heading-aware merge planned
+- Large docs still hit Groq free-tier if many chunks in parallel
+- Prisma dependency exists without schema — `npx prisma init` before DB use
+- No tests, no CI/CD yet
+- `Early readers` + `Pricing` hidden — solo MVP, coming soon
 
 ## Technology Stack
 
 | Layer | Technologies |
 |---|---|
-| Frontend | React 19, TypeScript 6, Vite 8, Tailwind CSS (📋 planned), shadcn/ui (📋 planned) |
-| Backend | Express 5, TypeScript 6, Multer, Zod |
+| Frontend | React 19, TypeScript 6, Vite 6, Tailwind 4, shadcn/ui, Framer Motion, GSAP, Zustand, bun |
+| Backend | Express 5, TypeScript 6, Multer, Zod, helmet/cors/morgan |
 | AI | Vercel AI SDK, Groq API (`@ai-sdk/groq`), OpenAI SDK (`@ai-sdk/openai`) |
-| Python | Microsoft MarkItDown, PyMuPDF |
-| Utilities | `child_process`, `fs`, `path` |
+| Python | Microsoft MarkItDown 0.1.6, PyMuPDF 1.28 |
+| Infra | Docker + nginx, Vercel (frontend), `child_process.execFile` bridge |
