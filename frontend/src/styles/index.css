@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  /* Canvas / Surfaces - from DESIGN.md (light defaults) */
+  --color-canvas: #fdfcfc;
+  --color-surface-soft: #f8f7f7;
+  --color-surface-card: #f1eeee;
+  --color-surface-dark: #201d1d;
+  --color-surface-dark-elevated: #302c2c;
+  /* Ink */
+  --color-ink: #201d1d;
+  --color-ink-deep: #0f0000;
+  --color-charcoal: #302c2c;
+  --color-body: #424245;
+  --color-mute: #646262;
+  --color-stone: #6e6e73;
+  --color-ash: #9a9898;
+  --color-hairline: rgba(15, 0, 0, 0.12);
+  --color-hairline-strong: #646262;
+  --color-on-dark: #fdfcfc;
+  --color-on-dark-mute: #9a9898;
+  /* Semantic - Apple HIG */
+  --color-accent: #007aff;
+  --color-accent-hover: #0056b3;
+  --color-warning: #ff9f0a;
+  --color-danger: #ff3b30;
+  --color-success: #30d158;
+
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-display: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-sm: 4px;
+}
+
+/* Dark theme overrides — warm near-black, keeps DESIGN.md mono/hairline language */
+html.dark {
+  --color-canvas: #0f0f0f;
+  --color-surface-soft: #1a1818;
+  --color-surface-card: #242222;
+  --color-surface-dark: #1a1818;
+  --color-surface-dark-elevated: #2a2828;
+  --color-ink: #fdfcfc;
+  --color-ink-deep: #ffffff;
+  --color-charcoal: #e8e6e6;
+  --color-body: #d4d2d2;
+  --color-mute: #a8a6a6;
+  --color-stone: #9a9898;
+  --color-ash: #6e6e73;
+  --color-hairline: rgba(253, 252, 252, 0.12);
+  --color-hairline-strong: #3a3838;
+  --color-on-dark: #fdfcfc;
+  --color-on-dark-mute: #9a9898;
+}
+
+/* Tell browser we support both */
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+/* base */
+* {
+  font-variant-ligatures: none;
+}
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: var(--color-ash); border-radius: 9999px; }
+::-webkit-scrollbar-track { background: var(--color-surface-soft); }
+
+/* prose tweaks for reader */
+.prose-mono {
+  font-family: var(--font-mono);
+}
+.prose-mono h1, .prose-mono h2, .prose-mono h3 { font-weight: 700; letter-spacing: -0.02em; }
+
+/* highlight.js dark tweak — keep code readable in dark without swapping stylesheet */
+html.dark .hljs {
+  background: var(--color-surface-card) !important;
+  color: var(--color-body) !important;
+}
+html.dark pre {
+  background: var(--color-surface-card) !important;
+}

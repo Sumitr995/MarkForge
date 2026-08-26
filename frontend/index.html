@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fdfcfc" />
+    <title>MarkForge — Turn PDFs into knowledge</title>
+    <meta name="description" content="MarkForge distills dense PDFs — research papers, textbooks, docs — into structured, readable, revision-ready documents. No chat, no summary theater. Just knowledge." />
+    <meta name="keywords" content="PDF to markdown, AI document, research paper, textbook, MarkForge" />
+    <meta name="author" content="MarkForge" />
+    <link rel="canonical" href="https://markforge.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://markforge.app/" />
+    <meta property="og:title" content="MarkForge — Turn PDFs into knowledge" />
+    <meta property="og:description" content="Drop a PDF. Get a document you actually want to read. TOC, callouts, definitions, tables — distilled by AI." />
+    <meta property="og:image" content="https://markforge.app/og.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MarkForge — Turn PDFs into knowledge" />
+    <meta name="twitter:description" content="AI Markdown Distiller for research papers, books, and docs." />
+    <meta name="twitter:image" content="https://markforge.app/og.png" />
+
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Prevent flash: apply stored/system theme before React hydrates -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("markforge-theme");
+          var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var theme = stored === "light" || stored === "dark" ? stored : "system";
+          var resolved = theme === "system" ? (systemDark ? "dark" : "light") : theme;
+          if (resolved === "dark") document.documentElement.classList.add("dark");
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", resolved === "dark" ? "#0f0f0f" : "#fdfcfc");
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <noscript>
+      <div style="max-width:600px;margin:48px auto;font-family:monospace;padding:24px;border:1px solid #ddd">
+        MarkForge needs JavaScript to distill PDFs. Please enable it and reload.
+      </div>
+    </noscript>
+  </body>
+</html>
