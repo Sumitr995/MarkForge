@@ -49,7 +49,7 @@ pip install -r requirements.txt   # deps: markitdown
 
 All routes mounted under `/api/v1`:
 - `GET /health` — health check (Zod body validation applied despite being GET)
-- `POST /documents/upload` — upload PDF, returns `{ originalName, markdown }`
+- `POST /documents/upload` — upload PDF, returns `{ originalName, markdown, assets }`
 
 ## Python setup
 
