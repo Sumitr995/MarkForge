@@ -25,12 +25,14 @@ if __name__ == "__main__":
         )
         sys.exit(1)
     pdf_path = sys.argv[1]
+    assets_dir = sys.argv[2] if len(sys.argv) > 2 else None
     try:
         markdown = extract_markdown(
             pdf_path
         )
         assets = extract_assets(
-            pdf_path
+            pdf_path,
+            assets_dir
         )
         print(
             json.dumps(
