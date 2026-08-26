@@ -9,6 +9,10 @@ python/.venv/
 
 # temp uploads
 backend/uploads/temp/
+backend/uploads/assets/
+
+# extracted assets (CWD fallback)
+assets/
 
 # build
 dist/
