@@ -34,5 +34,6 @@ export const env = {
   // Optional override for convert.py location — useful in Docker where layout differs
   PYTHON_SCRIPT: process.env.PYTHON_SCRIPT || "",
   ASSETS_DIR: process.env.ASSETS_DIR || "",
+  BACKEND_URL: process.env.BACKEND_URL || "",
   ASSET_RETENTION_MS: Number(process.env.ASSET_RETENTION_MS) || 24 * 60 * 60 * 1000, // 24h — keep extracted images readable for a day
 };

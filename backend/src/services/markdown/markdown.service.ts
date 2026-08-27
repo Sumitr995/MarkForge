@@ -98,16 +98,12 @@ class MarkdownService {
       };
     } catch (error: any) {
       console.error("MARKDOWN ERROR:", error);
-      console.error("MARKDOWN ERROR stdout:", error?.stdout);
-      console.error("MARKDOWN ERROR stderr:", error?.stderr);
-      console.error("MARKDOWN ERROR message:", error?.message);
+      if (error?.stderr) console.error("PYTHON STDERR:", error.stderr);
+      if (error?.stdout) console.error("PYTHON STDOUT:", error.stdout);
 
-      // Expose details temporarily for Render debugging — revert after fix
-      const detail =
-        error?.stderr || error?.stdout || error?.message || String(error);
       throw new ApiError(
         500,
-        `Failed to convert PDF into Markdown: ${detail.slice(0, 500)}`,
+        "Failed to convert PDF into Markdown",
       );
     }
   }

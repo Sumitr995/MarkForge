@@ -67,9 +67,9 @@ class DocumentService {
     const uploadsRoot = path.join(process.cwd(), "uploads");
     const relative = path.relative(uploadsRoot, absolutePath);
     const relUrl = "/uploads/" + relative.split(path.sep).join("/");
-    // simple direct link — frontend can use as-is
-    // in prod set BACKEND_URL=https://api.markforge.app, locally http://localhost:5000
-    const base = process.env.BACKEND_URL || `http://localhost:${env.PORT}`;
+    // Use BACKEND_URL in production (Render) so assets are https://markforge.onrender.com/uploads/...
+    // Locally falls back to http://localhost:5000
+    const base = env.BACKEND_URL || `http://localhost:${env.PORT}`;
     return `${base}${relUrl}`;
   }
 }
