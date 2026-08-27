@@ -64,25 +64,23 @@ export function Showcase() {
             <div className="mt-3 grid grid-cols-2 gap-3 font-mono text-[11px]">
               <div className="rounded-[4px] bg-white/5 p-2 border border-white/10 overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&q=80&auto=format&fit=crop"
-                  alt="Dense PDF — academic paper"
-                  className="h-[86px] w-full object-cover rounded-[4px] opacity-90 grayscale"
+                  src="/assets/before.png"
+                  alt="Before — dense PDF"
+                  className="h-[86px] w-full object-cover rounded-[4px] opacity-90"
                   loading="lazy"
-                  referrerPolicy="no-referrer"
                 />
-                <div className="mt-2 text-ash">Dense PDF</div>
-                <div className="mt-1 leading-4 text-on-dark-mute line-clamp-2">Attention is all you need… 42 pages, unstructured.</div>
+                <div className="mt-2 text-ash">Before — dense PDF</div>
+                <div className="mt-1 leading-4 text-on-dark-mute line-clamp-2">42 pages, unstructured — hard to revise.</div>
               </div>
               <div className="rounded-[4px] bg-white p-2 text-ink overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80&auto=format&fit=crop"
-                  alt="Distilled — clean reading"
+                  src="/assets/after-1.png"
+                  alt="After — distilled"
                   className="h-[86px] w-full object-cover rounded-[4px]"
                   loading="lazy"
-                  referrerPolicy="no-referrer"
                 />
-                <div className="mt-2 text-mute">Distilled</div>
-                <div className="mt-1 leading-4 font-medium line-clamp-2">Transformer = attention + FFN + residual.</div>
+                <div className="mt-2 text-mute">After — distilled</div>
+                <div className="mt-1 leading-4 font-medium line-clamp-2">12 sections, TOC + callouts — ready to read.</div>
               </div>
             </div>
             <Link to="/app" className="mt-4 block">

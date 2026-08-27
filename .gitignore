@@ -17,8 +17,10 @@ __pycache__/
 backend/uploads/temp/
 backend/uploads/assets/
 
-# extracted assets (CWD fallback)
+# extracted assets (CWD fallback) — but keep frontend demo assets for README/website
 assets/
+!frontend/public/assets/
+!frontend/public/assets/**
 
 # build
 dist/

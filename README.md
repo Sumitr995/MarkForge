@@ -46,12 +46,23 @@ Custom domain: `sumitr995.me` on Namecheap → `CNAME markforge → cname.vercel
 
 ### Demo
 
-| Upload | Reader |
-|---|---|
-| <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=520&q=80&auto=format&fit=crop" width="320" alt="upload" /> | <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=520&q=80&auto=format&fit=crop" width="320" alt="reader" /> |
-| Drop PDF → 20 MB max → `Need sample PDF?` → auto-distill `Sumit_Resume.pdf` | TOC + callouts + tables + copy/export + themed toasts |
+**Landing → Upload → Reading**
 
-Try: `https://markforge.sumitr995.me/app` → `Need sample PDF?` → `Reader` — no upload needed.
+| Landing | Upload | Reading |
+|---|---|---|
+| <img src="frontend/public/assets/landing-page.png" width="320" alt="Landing" /> | <img src="frontend/public/assets/upload-page.png" width="320" alt="Upload" /> | <img src="frontend/public/assets/reading-experience.png" width="320" alt="Reading" /> |
+| Hero — ASCII + CTA | Drop PDF → 20 MB → `Need sample PDF?` → `Sumit_Resume.pdf` | TOC + callouts + gallery + copy/export |
+
+Try: `https://markforge.sumitr995.me/app` → `Need sample PDF? Try Sumit_Resume.pdf →` — no upload needed.
+
+**Before → After**
+
+| Before (dense PDF) | After (distilled) |
+|---|---|
+| <img src="frontend/public/assets/before.png" width="320" alt="Before — dense PDF" /> | <img src="frontend/public/assets/after-1.png" width="320" alt="After — structured" /> |
+| 42 pages, no structure, hard to revise | 12 sections, TOC, definition cards — same knowledge, 10× readable |
+
+Full after view: <img src="frontend/public/assets/after-2.png" width="640" alt="After full" />
 
 ---
 
