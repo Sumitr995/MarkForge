@@ -12,9 +12,9 @@
 
 **Transform dense PDFs into structured, readable documents. Not a summary. Not a chatbot.**
 
-[![Stack](https://img.shields.io/badge/stack-React%20%7C%20Express%20%7C%20Python-black?style=flat-square)](#tech-stack) [![Groq](https://img.shields.io/badge/AI-Groq%20llama--3.3--70b-FF6B35?style=flat-square)](#how-it-works) [![MarkItDown](https://img.shields.io/badge/extract-MarkItDown%200.1.6-007AFF?style=flat-square)](#why-markitdown) [![License](https://img.shields.io/badge/license-MIT-30D158?style=flat-square)](#license)
+[![Live](https://img.shields.io/badge/live-markforge.sumitr995.me-30D158?style=flat-square)](https://markforge.sumitr995.me) [![API](https://img.shields.io/badge/API-markforge.onrender.com-007AFF?style=flat-square)](https://markforge.onrender.com/api/v1/health) [![Stack](https://img.shields.io/badge/stack-React%20%7C%20Express%20%7C%20Python%203.12-black?style=flat-square)](#tech-stack) [![Groq](https://img.shields.io/badge/AI-Groq%20llama--3.3--70b-FF6B35?style=flat-square)](#how-it-works) [![License](https://img.shields.io/badge/license-MIT-30D158?style=flat-square)](#license)
 
-[Live Demo](https://markforge.app) • [API Docs](#api) • [Report Bug](https://github.com/Sumitr995/MarkForge/issues)
+[Live Demo](https://markforge.sumitr995.me/app) • [API Docs](#api) • [Architecture](./Context/ARCHITECTURE.md) • [Report Bug](https://github.com/Sumitr995/MarkForge/issues)
 
 </div>
 
@@ -25,10 +25,22 @@
 ChatPDF **answers**. Summarizers **shorten**. Converters **dump**.  
 **MarkForge restructures** — same knowledge, 10× more readable.
 
-> 40-page paper → 12 sections, TOC, callouts, tables. Ready to revise, not just scroll.
+> 40-page paper → 12 sections, TOC, callouts, tables, definition cards. Ready to revise, not just scroll.
 
 **Cost:** Direct PDF → LLM = `~30k tokens ($0.30–$1.20)`.  
-MarkForge = `MarkItDown (0 tokens) + Groq on clean markdown ($0.01–$0.04)` → **10–30× cheaper**.
+MarkForge = `MarkItDown (0 tokens) + Groq on clean markdown ($0.01–$0.04)` → **10–30× cheaper** — local extraction, no LLM cost for tables.
+
+---
+
+### Live
+
+| Service | URL | Status |
+|---|---|---|
+| **Frontend** | [`markforge.sumitr995.me`](https://markforge.sumitr995.me) (Vercel) | `Vite + React 19` |
+| **API** | [`markforge.onrender.com`](https://markforge.onrender.com/api/v1/health) (Render) | `Express 5 + Python 3.12` |
+| **Demo PDF** | [`/demo/Sumit_Resume.pdf`](./frontend/public/demo/Sumit_Resume.pdf) | One-click `Try demo` on `/app` |
+
+Custom domain: `sumitr995.me` on Namecheap → `CNAME markforge → cname.vercel-dns.com`, `CNAME api.markforge → markforge.onrender.com`.
 
 ---
 
@@ -37,9 +49,9 @@ MarkForge = `MarkItDown (0 tokens) + Groq on clean markdown ($0.01–$0.04)` →
 | Upload | Reader |
 |---|---|
 | <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=520&q=80&auto=format&fit=crop" width="320" alt="upload" /> | <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=520&q=80&auto=format&fit=crop" width="320" alt="reader" /> |
-| Drop PDF → 20 MB max → distill | TOC + callouts + tables + copy/export |
+| Drop PDF → 20 MB max → `Need sample PDF?` → auto-distill `Sumit_Resume.pdf` | TOC + callouts + tables + copy/export + themed toasts |
 
-Try locally: `http://localhost:3000/app` → `http://localhost:3000/reader`
+Try: `https://markforge.sumitr995.me/app` → `Need sample PDF?` → `Reader` — no upload needed.
 
 ---
 
@@ -47,12 +59,13 @@ Try locally: `http://localhost:3000/app` → `http://localhost:3000/reader`
 
 | | What | How |
 |---|---|---|
-| **[+]** | **Zero-token extraction** | `MarkItDown` parses locally. No LLM cost. Tables intact. |
+| **[+]** | **Zero-token extraction** | `MarkItDown 0.1.6` locally. Tables intact. No LLM for parsing. |
 | **[+]** | **Knows your doc** | Groq classifies → 1 of 6 prompts (research / book / notes / docs / knowledge / general) |
-| **[+]** | **Built for long docs** | `8000-char` chunks. Free-tier safe. Parallel enhance. |
-| **[✓]** | **Structure, not summary** | TOC, definition cards, code blocks. Notion-like reading. |
-| **[✓]** | **Private by default** | Temp file → `finally { delete }`. Never stored. |
-| **[→]** | **Next** | Image viewer, Mermaid, PDF export, flashcards |
+| **[+]** | **Long-doc safe** | `8000-char` chunks, parallel Groq, `120s` timeout. Free-tier safe. |
+| **[✓]** | **Structure, not summary** | TOC, definition cards, code blocks, image gallery. Notion-like. |
+| **[✓]** | **Private by default** | `uploads/temp` → `finally { deleteFile }`. Assets `24h` via `ASSET_RETENTION_MS`. Never stored. |
+| **[→]** | **Themed UX** | Mono `Berkeley Mono → JetBrains Mono`, cream `#fdfcfc` / ink `#201d1d`, `4px`, `sonner` themed toasts, `system/light/dark` |
+| **[→]** | **Next** | Semantic chunking, Mermaid, PDF export, flashcards |
 
 ---
 
@@ -60,20 +73,22 @@ Try locally: `http://localhost:3000/app` → `http://localhost:3000/reader`
 
 ```mermaid
 flowchart LR
-  A[PDF upload] --> B[MarkItDown local]
+  A[PDF upload] --> B[MarkItDown + PyMuPDF]
   B --> C[Clean + Chunk 8000]
   C --> D[Classify → 6 prompts]
-  D --> E[Groq enhance per chunk]
-  E --> F[Merge → Reader]
+  D --> E[Groq per chunk]
+  E --> F[Merge → Reader + /uploads]
 ```
 
 **6 steps:**
-1. **Upload** — `Multer` validates `PDF + 20 MB` → `uploads/temp`
-2. **Extract** — `python convert.py` → `MarkItDown + PyMuPDF` → `{ markdown, assets }` via `JSON stdout`
-3. **Split** — `MarkdownPreprocessor` → `ChunkService`
-4. **Route** — `DocumentClassifier (Groq)` → `PromptRouter`
-5. **Enhance** — `AI SDK + Groq llama-3.3-70b` → `MergeService`
-6. **Read** — `{ originalName, markdown, assets }` → React reader (TOC, copy, export)
+1. **Upload** — `Multer` validates `PDF + 20 MB` → `uploads/temp` (`backend/src/middleware/upload.middleware.ts:8`)
+2. **Extract** — `python:3.12` `convert.py` → `MarkItDown + PyMuPDF` → `{ markdown, assets }` via `JSON stdout` (`backend/src/services/markdown/markdown.service.ts:1`)
+3. **Split** — `MarkdownPreprocessor` → `ChunkService (8000)`
+4. **Route** — `DocumentClassifier (Groq)` → `PromptRouter` (6 templates)
+5. **Enhance** — `Vercel AI SDK + Groq llama-3.3-70b` → `MergeService`
+6. **Read** — `{ originalName, markdown, assets: "https://.../uploads/..." }` → React reader (TOC, copy, export, gallery)
+
+`BACKEND_URL` env controls asset URLs — `https://markforge.onrender.com` in prod, `http://localhost:5000` locally (`backend/src/services/document/document.service.ts:66`).
 
 ---
 
@@ -81,17 +96,19 @@ flowchart LR
 
 | Layer | Stack |
 |---|---|
-| **Frontend** | React 19, Vite 6, Tailwind 4, shadcn/ui, Framer Motion, Zustand, `bun` |
-| **Backend** | Express 5, TypeScript 6, Multer, Zod, `helmet/cors/morgan` |
-| **AI** | Vercel AI SDK, Groq (`llama-3.3-70b`), OpenAI fallback |
-| **Python** | `markitdown 0.1.6`, `PyMuPDF 1.28`, `python-dotenv` |
-| **Infra** | Docker (recommended), `child_process.execFile` bridge |
+| **Frontend** | React 19, Vite 6, Tailwind 4, shadcn/ui, Framer Motion, GSAP, Zustand, `bun`, `sonner` (themed) |
+| **Backend** | Express 5, TypeScript 6, Multer, Zod, `helmet/cors/morgan`, `tsx` |
+| **AI** | Vercel AI SDK, Groq `llama-3.3-70b` (`openai/gpt-oss-120b` via `GROQ_MODEL`), OpenAI fallback |
+| **Python** | `python 3.12`, `markitdown 0.1.6`, `PyMuPDF 1.28` — `convert.py` + `assets.py` |
+| **Infra** | `python:3.12-slim` + Node 20 Docker (single image), Render (API) + Vercel (web), `child_process.execFile` bridge |
+
+> Requires `Python ≥3.12` — `numpy==2.5.0` needs it. `node:20-slim` (Python 3.11) fails; `Dockerfile:5` uses `python:3.12-slim`.
 
 ---
 
 ### Quick Start
 
-**Prereqs:** `Node 20+`, `Python 3.11+`, `bun`
+**Prereqs:** `Node 20+`, `Python 3.12+`, `bun`
 
 ```bash
 # 1. Python — extract engine
@@ -103,39 +120,76 @@ pip install -r requirements.txt
 
 # 2. Backend — http://localhost:5000
 cd ../backend
-cp .env.example .env          # set GROQ_API_KEY
+cp .env.example .env          # set GROQ_API_KEY, BACKEND_URL=http://localhost:5000
 npm install
 npm run dev                   # tsx watch src/server.ts
 
 # 3. Frontend — http://localhost:3000 (/api → :5000 via proxy)
 cd ../frontend
-cp .env.example .env.local    # VITE_API_URL=http://localhost:5000
+# VITE_API_URL="" uses Vite proxy; set http://localhost:5000 explicitly if needed
 bun install
 bun run dev
 ```
 
-Env: see [`backend/.env.example`](./backend/.env.example) + [`frontend/.env.example`](./frontend/.env.example)
+Env: [`backend/.env.example`](./backend/.env.example) • [`frontend/.env.example`](./frontend/.env.example) • [`Context/ARCHITECTURE.md`](./Context/ARCHITECTURE.md)
+
+---
+
+### Configuration
+
+**Backend `backend/.env.example`**
+
+```ini
+PORT=5000
+NODE_ENV=development
+GROQ_API_KEY=gsk_...
+GROQ_MODEL=openai/gpt-oss-120b
+OPENAI_API_KEY=sk-...
+PYTHON_PATH=              # auto: ../python/.venv/bin/python → /usr/local/bin/python (Docker)
+PYTHON_SCRIPT=            # auto: ../python/scripts/convert.py → /app/python/scripts/convert.py
+ASSETS_DIR=               # default: uploads/assets → /app/backend/uploads/assets
+BACKEND_URL=http://localhost:5000 # prod: https://markforge.onrender.com (asset base)
+ASSET_RETENTION_MS=86400000
+```
+
+`PYTHON_PATH/SCRIPT/ASSETS_DIR/BACKEND_URL` are all auto-detected if empty — see `backend/src/config/env.ts:26` + `markdown.service.ts:12`. Set them only in Docker/Render.
+
+**Frontend `frontend/.env.example`**
+
+```ini
+# "" = same-origin (Vite proxy in dev, Vercel rewrite in prod)
+VITE_API_URL=https://markforge.onrender.com
+VITE_API_PUBLIC_URL=https://markforge.onrender.com
+VITE_SITE_URL=https://markforge.sumitr995.me
+```
+
+`VITE_API_URL` drives `API_URL` (`frontend/src/lib/constants.ts:3`), `VITE_SITE_URL` drives OG/curl examples.
 
 ---
 
 ### API
 
-**Base:** `/api/v1`
+**Base:** `https://markforge.onrender.com/api/v1` (local `http://localhost:5000/api/v1`)
 
 ```bash
-# Upload
-curl -X POST http://localhost:5000/api/v1/documents/upload \
+# Upload — field: file, PDF 20MB
+curl -X POST https://markforge.onrender.com/api/v1/documents/upload \
   -F file=@paper.pdf
-# → { "success": true, "data": { "originalName": "paper.pdf", "markdown": "# ...", "assets": [] } }
+# → { "success": true, "data": { "originalName": "paper.pdf", "markdown": "# ...", "assets": [{ "type":"image","path":"https://.../uploads/temp/assets/xxx.png","page":1 }] } }
+
+# Try demo PDF (no local file needed)
+curl -s https://markforge.sumitr995.me/demo/Sumit_Resume.pdf -o /tmp/demo.pdf
+curl -X POST https://markforge.onrender.com/api/v1/documents/upload -F file=@/tmp/demo.pdf
 
 # Health
-curl http://localhost:5000/api/v1/health
+curl https://markforge.onrender.com/api/v1/health
+# → { "success": true, "status": "OK" }
 ```
 
 | Field | Constraint |
 |---|---|
 | `file` | `PDF` only, `20 MB` max, `multipart/form-data` |
-| `assets` | `{ type: "image", path: "/uploads/...", page: 1 }[]` |
+| `assets` | `{ type: "image", path: "https://.../uploads/...", page: 1 }[]` — served via `express.static(/uploads)` |
 
 Full contract: [`Context/API.md`](./Context/API.md) • [`Context/CONTRACTS.md`](./Context/CONTRACTS.md)
 
@@ -145,61 +199,75 @@ Full contract: [`Context/API.md`](./Context/API.md) • [`Context/CONTRACTS.md`]
 
 ```
 MarkForge/
-├── backend/   Express API — routes / services / AI pipeline
-├── frontend/  React + Vite — sections / reader / theme (system/light/dark)
-├── python/    MarkItDown + PyMuPDF — convert.py → JSON
-└── Context/   Architecture, Decisions, Roadmap
+├── Dockerfile              # python:3.12-slim + Node 20 — backend + python in one image (context = root)
+├── backend/
+│   ├── Dockerfile          # same as root, for Render (Root Directory = "")
+│   ├── src/                # Express API — routes / services / AI pipeline
+│   └── uploads/temp/       # ephemeral — deleted per request, assets 24h
+├── frontend/
+│   ├── public/demo/Sumit_Resume.pdf  # demo sample — fetched by Dropzone "Need sample PDF?"
+│   ├── src/                # React + Vite — sections / reader / theme (system/light/dark)
+│   └── vercel.json         # SPA rewrite + bun build
+├── python/
+│   ├── scripts/convert.py  # entry — prints JSON { markdown, assets }
+│   └── services/           # markdown.py (MarkItDown) + assets.py (PyMuPDF)
+└── Context/                # Architecture, Decisions, Roadmap
 ```
 
-Deep dive: [`Context/ARCHITECTURE.md`](./Context/ARCHITECTURE.md)
+Deep dive: [`Context/ARCHITECTURE.md`](./Context/ARCHITECTURE.md) — request/runtime/data/error flow + service table.
 
 ---
 
-### Configuration
+### Deploy (free, perfect)
 
-**Backend `.env`**
-```ini
-PORT=5000
-GROQ_API_KEY=gsk_...
-GROQ_MODEL=openai/gpt-oss-120b
-PYTHON_PATH=              # auto: ../python/.venv/bin/python
-ASSETS_DIR=               # default: uploads/assets
-```
+> Backend needs Python — not Vercel serverless. Use Render (Docker) + Vercel (frontend).
 
-**Frontend `.env.local`**
-```ini
-VITE_API_URL=http://localhost:5000
-VITE_API_PUBLIC_URL=https://api.markforge.app
-VITE_SITE_URL=https://markforge.app
-```
+**1. Backend → Render (free 750h)**
 
----
+* Repo: `https://github.com/Sumitr995/MarkForge`
+* Render → New Web Service → `Docker` → Root Directory `""` → Dockerfile ` ./Dockerfile` (or `./backend/Dockerfile`)
+* Env (from `backend/.env.production`):
+  ```
+  NODE_ENV=production
+  GROQ_API_KEY=gsk_...
+  GROQ_MODEL=openai/gpt-oss-120b
+  PYTHON_PATH=/usr/local/bin/python
+  PYTHON_SCRIPT=/app/python/scripts/convert.py
+  ASSETS_DIR=/app/backend/uploads/assets
+  BACKEND_URL=https://markforge.onrender.com
+  ```
+* Deploys in ~3 min — test `GET /api/v1/health`
 
-### Deploy
+**2. Frontend → Vercel (free)**
 
-> **Docker only** — needs Python subprocess + FS. Not Vercel serverless.
+* Vercel → Import `MarkForge` → Root Directory `frontend` → `bun install` + `bun run build` (`vercel.json`)
+* Env:
+  ```
+  VITE_API_URL=https://markforge.onrender.com
+  VITE_API_PUBLIC_URL=https://markforge.onrender.com
+  VITE_SITE_URL=https://markforge.sumitr995.me
+  ```
+* Custom domain: Vercel → Domains → `markforge.sumitr995.me` → Namecheap `CNAME markforge → cname.vercel-dns.com` → auto SSL
+
+**Docker locally**
 
 ```bash
-# Backend + Python image
-docker build -f backend/Dockerfile -t markforge-api ./backend
-docker run -p 5000:5000 --env-file backend/.env markforge-api
-
-# Frontend (nginx)
-docker build -f frontend/Dockerfile -t markforge-web ./frontend
-# or Vercel: vercel --prod (frontend only, API stays on Render/Railway/Fly)
+docker build -f Dockerfile -t markforge:local .   # context = root (needs python/ + backend/)
+docker run -p 5000:5000 --env-file backend/.env.production markforge:local
+# Frontend
+docker build -f frontend/Dockerfile -t markforge-web ./frontend  # or Vercel
 ```
-
-Recommended: **Render / Railway / Fly** → single `Dockerfile`.
 
 ---
 
 ### Roadmap
 
-- [x] MarkItDown + Groq pipeline
-- [x] Reader with TOC + export
-- [x] Theme toggler (system/light/dark)
-- [ ] Semantic chunking (heading-aware)
-- [ ] Image viewer + Mermaid
+- [x] MarkItDown + Groq pipeline + `ExtractionResult { assets }`
+- [x] Reader (TOC, markdown, copy/export, gallery, health dot)
+- [x] Theme `system/light/dark` + `sonner` mono toasts + `Sumit_Resume.pdf` demo
+- [x] Deploy artifacts — `Dockerfile` (python:3.12) + `vercel.json` + `nginx.conf` + custom domain
+- [ ] Semantic chunking (heading-aware, not `8000`-char split)
+- [ ] Image viewer + Mermaid + `MergeService` heading-aware
 - [ ] PDF export, flashcards, quiz
 - `Early readers + Pricing` — hidden, coming soon.
 
@@ -213,7 +281,7 @@ See [`Context/ROADMAP.md`](./Context/ROADMAP.md)
   <img src="https://avatars.githubusercontent.com/u/182794567?v=4" width="64" height="64" style="border-radius:50%;border:1px solid #eee" alt="Sumit Rathod" />
 </div>
 
-**Sumit Rathod — @Sumitr995** · Mumbai, India · Full Stack / Cloud / Realtime Systems
+**Sumit Rathod — @Sumitr995** · Mumbai, India · Full Stack / Cloud / Realtime
 
 [Portfolio](https://sumitr995.me) · [GitHub](https://github.com/Sumitr995) · [Project Repo](https://github.com/Sumitr995/MarkForge) · [LinkedIn](https://www.linkedin.com/in/Sumitr995/)
 
