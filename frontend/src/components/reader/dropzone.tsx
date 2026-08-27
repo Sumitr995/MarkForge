@@ -154,7 +154,7 @@ export function Dropzone() {
 
       <div className="mt-3 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-[11px] text-mute">
         <span>Free: {GUEST_DAILY_LIMIT}/day · Pro: 100/mo · <a href="#pricing" className="underline underline-offset-4 hover:text-ink">Pricing →</a></span>
-        <button onClick={handleSample} disabled={loading} className="underline underline-offset-4 hover:text-ink disabled:opacity-50">Try demo: Sumit_Resume.pdf →</button>
+        <button onClick={handleSample} disabled={loading} className="underline underline-offset-4 hover:text-ink disabled:opacity-50">Need sample PDF? Try Sumit_Resume.pdf →</button>
       </div>
     </div>
   );
