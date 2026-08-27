@@ -66,6 +66,39 @@ export function Dropzone() {
     }
   };
 
+  const handleSample = async () => {
+    if (loading) return;
+    setLoading(true);
+    setProgress(12);
+    const t1 = setTimeout(() => setProgress(36), 600);
+    const t2 = setTimeout(() => setProgress(68), 1800);
+    const controller = new AbortController();
+    abortRef.current = controller;
+    try {
+      // public/demo/Sumit_Resume.pdf is served at /demo/Sumit_Resume.pdf in both dev and prod
+      const res = await fetch("/demo/Sumit_Resume.pdf");
+      if (!res.ok) throw new Error("Failed to load sample PDF");
+      const blob = await res.blob();
+      const sampleFile = new File([blob], "Sumit_Resume.pdf", { type: "application/pdf" });
+      setFile(sampleFile);
+      setProgress(68);
+      const uploadRes = await uploadPdf(sampleFile, controller.signal);
+      setProgress(100);
+      setDoc(uploadRes.data);
+      toast.success("Sample distilled — opening reader", { description: `${uploadRes.data.originalName} · ${(uploadRes.data.markdown.length / 1000).toFixed(1)}k chars` });
+      navigate("/reader");
+    } catch (e: unknown) {
+      const msg = e instanceof ApiError ? e.message : e instanceof Error ? e.message : "Sample upload failed";
+      toast.error("Could not load sample", { description: msg });
+    } finally {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      setLoading(false);
+      setTimeout(() => setProgress(0), 800);
+      abortRef.current = null;
+    }
+  };
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div
@@ -121,7 +154,7 @@ export function Dropzone() {
 
       <div className="mt-3 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-[11px] text-mute">
         <span>Free: {GUEST_DAILY_LIMIT}/day · Pro: 100/mo · <a href="#pricing" className="underline underline-offset-4 hover:text-ink">Pricing →</a></span>
-        <button onClick={() => toast.info("Sample PDFs: try uploading any paper from arXiv — e.g. 'Attention Is All You Need'.")} className="underline underline-offset-4 hover:text-ink">Need a sample PDF?</button>
+        <button onClick={handleSample} disabled={loading} className="underline underline-offset-4 hover:text-ink disabled:opacity-50">Try demo: Sumit_Resume.pdf →</button>
       </div>
     </div>
   );
