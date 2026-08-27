@@ -52,7 +52,8 @@ function resolvePythonPath(): string {
 
   if (fs.existsSync(candidate)) return candidate;
 
-  // Docker/system python fallbacks
+  // Docker/system python fallbacks (python:3.12-slim uses /usr/local/bin/python)
+  if (fs.existsSync("/usr/local/bin/python")) return "/usr/local/bin/python";
   if (fs.existsSync("/usr/bin/python3")) return "/usr/bin/python3";
   if (fs.existsSync("/usr/local/bin/python3")) return "/usr/local/bin/python3";
 

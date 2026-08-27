@@ -2,14 +2,16 @@
 # NOTE: Build context MUST be repo root, not backend/
 # Render: set Root Directory = "" (empty) and Dockerfile Path = ./backend/Dockerfile
 # Fly/Koyeb/CLI: docker build -f backend/Dockerfile .
-#
-# If your platform forces context = backend/, use the root ./Dockerfile instead.
+# Base is python:3.12 because requirements.txt pins numpy==2.5.0 which needs Python >=3.12
 
-FROM node:20-slim
+FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 python3-pip python3-venv \
-    && rm -rf /var/lib/apt/lists/*
+    curl ca-certificates gnupg \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && rm -rf /var/lib/apt/lists/* \
+    && node --version && npm --version && python3 --version
 
 WORKDIR /app
 
@@ -28,7 +30,7 @@ RUN mkdir -p /app/backend/uploads/temp /app/backend/uploads/assets
 WORKDIR /app/backend
 
 ENV NODE_ENV=production
-ENV PYTHON_PATH=/usr/bin/python3
+ENV PYTHON_PATH=/usr/local/bin/python
 ENV ASSETS_DIR=/app/backend/uploads/assets
 ENV PORT=5000
 
