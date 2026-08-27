@@ -9,17 +9,40 @@ import { env } from "../../config/env";
 
 const execFileAsync = promisify(execFile);
 
-const PYTHON_SCRIPT = path.resolve(
-  process.cwd(),
-  "../python/scripts/convert.py",
-);
+function resolvePythonScript(): string {
+  // 1) Explicit env override (Docker / custom deploy)
+  if (env.PYTHON_SCRIPT && fs.existsSync(env.PYTHON_SCRIPT)) {
+    return path.resolve(env.PYTHON_SCRIPT);
+  }
+  if (env.PYTHON_SCRIPT) return path.resolve(env.PYTHON_SCRIPT);
+
+  // Candidates cover: local dev (backend/), Docker (/app/backend), flat layout (/app)
+  const candidates = [
+    path.resolve(process.cwd(), "../python/scripts/convert.py"), // local: backend -> ../python
+    path.resolve(process.cwd(), "python/scripts/convert.py"), // flat: /app/python
+    path.resolve("/app/python/scripts/convert.py"), // Docker absolute
+    path.resolve(process.cwd(), "../../python/scripts/convert.py"), // fallback
+  ];
+
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c;
+  }
+  // default to first candidate so error message shows expected path
+  return candidates[0];
+}
 
 const ASSETS_DIR = path.resolve(
   env.ASSETS_DIR || path.join(process.cwd(), "uploads", "assets"),
 );
 
 function resolvePythonPath(): string {
-  if (env.PYTHON_PATH) return path.resolve(env.PYTHON_PATH);
+  // env var takes precedence — in Docker it's /usr/bin/python3
+  if (env.PYTHON_PATH) {
+    // if absolute path exists, use as-is; otherwise resolve relative
+    return path.isAbsolute(env.PYTHON_PATH)
+      ? env.PYTHON_PATH
+      : path.resolve(env.PYTHON_PATH);
+  }
 
   const venvRoot = path.resolve(process.cwd(), "../python/.venv");
   const candidate =
@@ -27,7 +50,13 @@ function resolvePythonPath(): string {
       ? path.join(venvRoot, "Scripts", "python.exe")
       : path.join(venvRoot, "bin", "python");
 
-  return fs.existsSync(candidate) ? candidate : "python";
+  if (fs.existsSync(candidate)) return candidate;
+
+  // Docker/system python fallbacks
+  if (fs.existsSync("/usr/bin/python3")) return "/usr/bin/python3";
+  if (fs.existsSync("/usr/local/bin/python3")) return "/usr/local/bin/python3";
+
+  return "python3";
 }
 
 class MarkdownService {
@@ -37,11 +66,16 @@ class MarkdownService {
   ): Promise<ExtractionResult> {
     try {
       const pythonPath = resolvePythonPath();
+      const pythonScript = resolvePythonScript();
+
+      if (!fs.existsSync(pythonScript)) {
+        throw new Error(`Python script not found at ${pythonScript}`);
+      }
 
       const { stdout } = await execFileAsync(
         pythonPath,
 
-        [PYTHON_SCRIPT, filePath, assetsDir],
+        [pythonScript, filePath, assetsDir],
 
         {
           encoding: "utf8",

@@ -1,0 +1,33 @@
+# Node
+node_modules
+npm-debug.log
+**/node_modules
+**/dist
+**/.turbo
+
+# Python venv
+python/.venv
+**/__pycache__
+**/*.pyc
+**/*.pyo
+
+# Env
+.env
+**/.env
+
+# Uploads (ephemeral)
+backend/uploads/temp
+backend/uploads/assets
+uploads
+
+# Frontend (backend image doesn't need it)
+frontend/node_modules
+frontend/dist
+
+# Git
+.git
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db

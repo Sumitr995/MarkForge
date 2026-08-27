@@ -1,11 +1,17 @@
 # dependencies
 node_modules/
 
-# env
+# env — keep secrets out of git (see backend/.env.example)
 .env
+.env.local
+.env.production
+.env.*.local
 
 # python
 python/.venv/
+__pycache__/
+*.pyc
+*.pyo
 
 # temp uploads
 backend/uploads/temp/
@@ -16,3 +22,4 @@ assets/
 
 # build
 dist/
+*.tsbuildinfo
