@@ -73,15 +73,18 @@ class MarkdownService {
         throw new Error(`Python script not found at ${pythonScript}`);
       }
 
-      const { stdout } = await execFileAsync(
+      const { stdout, stderr } = await execFileAsync(
         pythonPath,
 
         [pythonScript, filePath, assetsDir],
 
         {
           encoding: "utf8",
+          maxBuffer: 10 * 1024 * 1024,
         },
       );
+
+      if (stderr) console.error("PYTHON STDERR:", stderr);
 
       const result = JSON.parse(stdout);
 
@@ -93,13 +96,18 @@ class MarkdownService {
         markdown: result.markdown,
         assets: result.assets ?? [],
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error("MARKDOWN ERROR:", error);
+      console.error("MARKDOWN ERROR stdout:", error?.stdout);
+      console.error("MARKDOWN ERROR stderr:", error?.stderr);
+      console.error("MARKDOWN ERROR message:", error?.message);
 
+      // Expose details temporarily for Render debugging — revert after fix
+      const detail =
+        error?.stderr || error?.stdout || error?.message || String(error);
       throw new ApiError(
         500,
-
-        "Failed to convert PDF into Markdown",
+        `Failed to convert PDF into Markdown: ${detail.slice(0, 500)}`,
       );
     }
   }
