@@ -83,12 +83,58 @@ Full after view: <img src="frontend/public/assets/after-2.png" width="640" alt="
 ### How it works
 
 ```mermaid
-flowchart LR
-  A[PDF upload] --> B[MarkItDown + PyMuPDF]
-  B --> C[Clean + Chunk 8000]
-  C --> D[Classify → 6 prompts]
-  D --> E[Groq per chunk]
-  E --> F[Merge → Reader + /uploads]
+flowchart TD
+    A[PDF Upload]
+
+    subgraph EXTRACT[Extraction]
+        B1[MarkItDown]
+        B2[PyMuPDF]
+        B1 --> B3[Merged Text]
+        B2 --> B3
+    end
+
+    subgraph PREP[Preprocessing]
+        C1[Clean Text]
+        C2[Chunk · 8000 chars]
+        C1 --> C2
+    end
+
+    D{Classify Chunk}
+
+    subgraph AI[Groq AI — per prompt type]
+        direction LR
+        E1[Prompt 1]
+        E2[Prompt 2]
+        E3[Prompt 3]
+        E4[Prompt 4]
+        E5[Prompt 5]
+        E6[Prompt 6]
+    end
+
+    subgraph OUTPUT[Output]
+        F1[Merge Results]
+        F2[Reader UI]
+        F3[/uploads Storage/]
+        F1 --> F2
+        F1 --> F3
+    end
+
+    A --> B1
+    A --> B2
+    B3 --> C1
+    C2 --> D
+    D --> E1
+    D --> E2
+    D --> E3
+    D --> E4
+    D --> E5
+    D --> E6
+    E1 --> F1
+    E2 --> F1
+    E3 --> F1
+    E4 --> F1
+    E5 --> F1
+    E6 --> F1
 ```
 
 **6 steps:**
