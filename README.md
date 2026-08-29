@@ -99,16 +99,16 @@ flowchart TD
         C1 --> C2
     end
 
-    D{Classify Chunk}
+    D{Recognize Doc Type}
 
-    subgraph AI[Groq AI — per prompt type]
+    subgraph AI[Groq AI — recognizes doc type & executes accordingly]
         direction LR
-        E1[Prompt 1]
-        E2[Prompt 2]
-        E3[Prompt 3]
-        E4[Prompt 4]
-        E5[Prompt 5]
-        E6[Prompt 6]
+        E1[Handler 1]
+        E2[Handler 2]
+        E3[Handler 3]
+        E4[Handler 4]
+        E5[Handler 5]
+        E6[Handler 6]
     end
 
     subgraph OUTPUT[Output]
