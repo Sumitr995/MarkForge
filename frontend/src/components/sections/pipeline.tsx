@@ -1,45 +1,34 @@
 import { SectionLabel } from "@/components/ui/badge";
-import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const STEPS = [
-  { n: "01", title: "Upload", desc: "Drop a PDF. Max 20 MB.", tech: "PDF only" },
-  { n: "02", title: "Extract", desc: "We read your PDF with tables and headings intact.", tech: "Accurate reading" },
-  { n: "03", title: "Split", desc: "Long docs split into parts for best results.", tech: "Long-doc safe" },
-  { n: "04", title: "Route", desc: "We detect your doc type and adjust automatically.", tech: "Automatic" },
-  { n: "05", title: "Enhance", desc: "Your content restructured for clarity.", tech: "AI enhance" },
-  { n: "06", title: "Read", desc: "Read, copy, or download. File already deleted.", tech: "Private" },
+  { n: "01", title: "Upload your PDF", desc: "Drop a PDF up to 20 MB. No sign-up needed." },
+  { n: "02", title: "We distill it", desc: "Your document is read and restructured for clarity." },
+  { n: "03", title: "Read and share", desc: "Contents, tables, and highlights. Copy, download, or share." },
 ];
 
 export function Pipeline() {
   return (
     <section id="pipeline" className="mx-auto max-w-[1100px] px-4 sm:px-6 py-12 sm:py-16 scroll-mt-20">
-      <SectionLabel kicker="02 — How it works">Six steps. No mystery.</SectionLabel>
+      <SectionLabel kicker="How it works">Three steps. Done in seconds.</SectionLabel>
 
-      <div className="relative">
-        <div className="absolute left-[19px] top-2 bottom-2 w-px bg-hairline hidden sm:block" />
-        <div className="grid gap-3">
-          {STEPS.map((s) => (
-            <div key={s.n} className="relative flex gap-4 rounded-[4px] border border-hairline bg-canvas p-4 sm:p-5 hover:bg-surface-soft hover:border-hairline-strong transition-colors group">
-              <div className="hidden sm:flex h-10 w-10 shrink-0 items-center justify-center rounded-[4px] bg-ink text-canvas font-mono text-[12px] font-bold group-hover:bg-ink-deep transition-colors">
-                {s.n}
-              </div>
-              <div className="sm:hidden font-mono text-[11px] font-bold text-ink">{s.n}</div>
-              <div className="flex-1 min-w-0">
-                <div className="font-mono text-[13px] font-bold text-ink">{s.title}</div>
-                <div className="font-mono text-[12px] text-body leading-5 mt-1">{s.desc}</div>
-                <div className="mt-2 inline-flex rounded-[4px] bg-surface-soft border border-hairline px-2 py-1 font-mono text-[10px] text-mute">{s.tech}</div>
-              </div>
-              <div className="hidden lg:flex self-center text-ash group-hover:text-ink transition-colors">
-                <ArrowRight size={14} />
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="grid sm:grid-cols-3 gap-4">
+        {STEPS.map((s) => (
+          <div key={s.n} className="rounded-[4px] border border-hairline bg-canvas p-5 hover:bg-surface-soft transition-colors">
+            <div className="font-mono text-[11px] font-bold text-mute">{s.n}</div>
+            <div className="mt-1 font-mono text-[14px] font-bold text-ink">{s.title}</div>
+            <div className="mt-1 font-mono text-[12px] leading-5 text-body">{s.desc}</div>
+          </div>
+        ))}
       </div>
 
-      <div className="mt-6 rounded-[4px] border border-hairline bg-surface-soft p-3 flex gap-2 font-mono text-[11px] text-body">
-        <span className="font-bold text-ink shrink-0">[→] Next:</span>
-        <span>Tables and sections always stay together.</span>
+      <div className="mt-6 text-center">
+        <Link to="/app" className="inline-flex rounded-[4px] bg-ink px-5 py-2.5 font-mono text-[13px] font-medium text-canvas">
+          Try it now — free →
+        </Link>
+        <div className="mt-2 font-mono text-[11px] text-mute">
+          <Link to="/docs" className="underline underline-offset-4 hover:text-ink">How it works in detail →</Link>
+        </div>
       </div>
     </section>
   );

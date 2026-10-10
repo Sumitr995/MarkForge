@@ -2,6 +2,7 @@ import { Hero } from "@/components/sections/hero";
 import { Features } from "@/components/sections/features";
 import { WhyMarkItDown } from "@/components/sections/why-markitdown";
 import { Pipeline } from "@/components/sections/pipeline";
+import { Who } from "@/components/sections/who";
 import { Showcase } from "@/components/sections/showcase";
 // import { Testimonials } from "@/components/sections/testimonials"; // hidden for now — early readers, add later
 import { FAQ } from "@/components/sections/faq";
@@ -16,6 +17,7 @@ export default function HomePage() {
       <Features />
       <WhyMarkItDown />
       <Pipeline />
+      <Who />
       <Showcase />
       {/* <Testimonials /> */}
       <FAQ />

@@ -29,5 +29,7 @@ export const MAX_FILE_SIZE_MB = 20;
 export const ACCEPTED_FILE_TYPES = ["application/pdf"] as const;
 export const GUEST_DAILY_LIMIT = 3;
 
+export const APP_VERSION = "v0.1.0-beta";
+
 // Product copy — single source for curl / API examples (no localhost in UI)
 export const CURL_EXAMPLE = `curl -X POST ${API_PUBLIC_URL}/api/v1/documents/upload -F file=@paper.pdf`;

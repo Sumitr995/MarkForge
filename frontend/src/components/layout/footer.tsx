@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { APP_VERSION } from "@/lib/constants";
 
 export function Footer() {
   return (
@@ -58,7 +59,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-hairline pt-6 font-mono text-[12px] text-mute">
-          <span>© 2026 MarkForge — built solo</span>
+          <span>© 2026 MarkForge — built solo · {APP_VERSION}</span>
           <span className="flex items-center gap-3">
             <Link to="/terms" className="hover:text-ink">Terms</Link>
             <Link to="/privacy" className="hover:text-ink">Privacy</Link>
