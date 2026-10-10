@@ -4,7 +4,7 @@ import { Upload, FileText, Loader2, ShieldCheck, Clock3, X } from "lucide-react"
 import { MAX_FILE_SIZE_MB, GUEST_DAILY_LIMIT } from "@/lib/constants";
 import { uploadPdf, ApiError } from "@/lib/api";
 import { useDocumentStore } from "@/stores/document-store";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
@@ -13,6 +13,7 @@ export function Dropzone() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [file, setFile] = useState<File | null>(null);
+  const [agreed, setAgreed] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const setDoc = useDocumentStore((s) => s.setDoc);
@@ -37,8 +38,17 @@ export function Dropzone() {
     setFile(f);
   }, []);
 
+  const requireConsent = () => {
+    if (!agreed) {
+      toast.error("Please accept the Terms & Privacy Policy first");
+      return false;
+    }
+    return true;
+  };
+
   const doUpload = async () => {
     if (!file) return;
+    if (!requireConsent()) return;
     setLoading(true);
     setProgress(12);
     const t1 = setTimeout(() => setProgress(36), 600);
@@ -54,7 +64,7 @@ export function Dropzone() {
     } catch (e: unknown) {
       const msg = e instanceof ApiError ? e.message : e instanceof Error ? e.message : "Upload failed";
       const status = e instanceof ApiError ? e.status : undefined;
-      if (status === 429) toast.error("Daily limit reached", { description: `Free plan: ${GUEST_DAILY_LIMIT}/day. Try tomorrow or join Pro waitlist.` });
+      if (status === 429) toast.error("Daily limit reached", { description: `Free plan: ${GUEST_DAILY_LIMIT}/day. Please try again tomorrow.` });
       else if (status === 413) toast.error(msg);
       else toast.error("Could not distill PDF", { description: msg });
     } finally {
@@ -68,6 +78,7 @@ export function Dropzone() {
 
   const handleSample = async () => {
     if (loading) return;
+    if (!requireConsent()) return;
     setLoading(true);
     setProgress(12);
     const t1 = setTimeout(() => setProgress(36), 600);
@@ -139,7 +150,7 @@ export function Dropzone() {
               </div>
             )}
             <div className="mt-4 flex gap-2" onClick={(e) => e.stopPropagation()}>
-              <Button variant="primary" onClick={doUpload} disabled={loading}>{loading ? "Distilling…" : "Distill →"}</Button>
+              <Button variant="primary" onClick={doUpload} disabled={loading || !agreed} title={agreed ? "Distill PDF" : "Accept Terms & Privacy first"}>{loading ? "Distilling…" : "Distill →"}</Button>
               <Button variant="secondary" onClick={() => setFile(null)} disabled={loading}>Remove</Button>
               {loading && (
                 <Button variant="ghost" onClick={() => abortRef.current?.abort()} title="Cancel">
@@ -152,9 +163,29 @@ export function Dropzone() {
         {dragOver && <div className="absolute inset-2 rounded-[4px] border border-ink pointer-events-none" />}
       </div>
 
+      <label className="mt-3 flex cursor-pointer items-start gap-2 rounded-[4px] border border-hairline bg-canvas px-3 py-2.5 text-left">
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 accent-black"
+        />
+        <span className="font-mono text-[11px] leading-5 text-mute">
+          I agree to the <Link to="/terms" className="underline underline-offset-4 hover:text-ink text-ink">Terms</Link> and{" "}
+          <Link to="/privacy" className="underline underline-offset-4 hover:text-ink text-ink">Privacy Policy</Link>. My file will be sent to an AI provider for processing and deleted afterwards.
+        </span>
+      </label>
+
       <div className="mt-3 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-[11px] text-mute">
         <span>Free: {GUEST_DAILY_LIMIT}/day · No sign-up needed</span>
         <button onClick={handleSample} disabled={loading} className="underline underline-offset-4 hover:text-ink disabled:opacity-50">Need sample PDF? Try Sumit_Resume.pdf →</button>
+      </div>
+      <div className="mt-2 text-center font-mono text-[11px] text-mute">
+        <Link to="/terms" className="underline underline-offset-4 hover:text-ink">Terms</Link>
+        {" · "}
+        <Link to="/privacy" className="underline underline-offset-4 hover:text-ink">Privacy</Link>
+        {" · "}
+        <Link to="/contact" className="underline underline-offset-4 hover:text-ink">Contact</Link>
       </div>
     </div>
   );

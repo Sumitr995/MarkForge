@@ -11,6 +11,9 @@ export function Footer() {
               <li><Link to="/#features" className="hover:text-ink">Features</Link></li>
               <li><Link to="/#pipeline" className="hover:text-ink">How it works</Link></li>
               <li><Link to="/app" className="hover:text-ink">Try now</Link></li>
+              <li><Link to="/terms" className="hover:text-ink">Terms</Link></li>
+              <li><Link to="/privacy" className="hover:text-ink">Privacy</Link></li>
+              <li><Link to="/contact" className="hover:text-ink">Contact</Link></li>
             </ul>
           </div>
           <div>
@@ -56,8 +59,10 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-hairline pt-6 font-mono text-[12px] text-mute">
           <span>© 2026 MarkForge — built solo</span>
-          <span className="flex items-center gap-2">
-            <span>Private · Fast · No sign-up</span>
+          <span className="flex items-center gap-3">
+            <Link to="/terms" className="hover:text-ink">Terms</Link>
+            <Link to="/privacy" className="hover:text-ink">Privacy</Link>
+            <Link to="/contact" className="hover:text-ink">Contact</Link>
             <span className="inline-flex h-2 w-2 rounded-full bg-success animate-pulse" />
           </span>
         </div>

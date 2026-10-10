@@ -19,6 +19,9 @@ export const ROUTES = {
   APP: "/app",
   READER: "/reader",
   DOCS: "/docs",
+  TERMS: "/terms",
+  PRIVACY: "/privacy",
+  CONTACT: "/contact",
   PRICING: "/#pricing",
 } as const;
 

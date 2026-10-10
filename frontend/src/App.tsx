@@ -5,6 +5,9 @@ import HomePage from "@/pages/home";
 import AppPage from "@/pages/app";
 import ReaderPage from "@/pages/reader";
 import DocsPage from "@/pages/docs";
+import TermsPage from "@/pages/terms";
+import PrivacyPage from "@/pages/privacy";
+import ContactPage from "@/pages/contact";
 
 function NotFound() {
   return (
@@ -30,6 +33,9 @@ export default function App() {
             <Route path="/app" element={<AppPage />} />
             <Route path="/reader" element={<ReaderPage />} />
             <Route path="/docs" element={<DocsPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
