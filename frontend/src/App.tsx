@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "@/components/layout/layout";
+import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import HomePage from "@/pages/home";
 import AppPage from "@/pages/app";
@@ -26,6 +27,7 @@ function NotFound() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <ErrorBoundary>
         <Layout>
           <Routes>
