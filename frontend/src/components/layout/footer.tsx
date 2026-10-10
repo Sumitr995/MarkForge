@@ -57,7 +57,7 @@ export function Footer() {
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-hairline pt-6 font-mono text-[12px] text-mute">
           <span>© 2026 MarkForge — built solo</span>
           <span className="flex items-center gap-2">
-            <span>Groq · MarkItDown · PyMuPDF</span>
+            <span>Private · Fast · No sign-up</span>
             <span className="inline-flex h-2 w-2 rounded-full bg-success animate-pulse" />
           </span>
         </div>

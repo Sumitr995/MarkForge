@@ -135,7 +135,7 @@ export function Dropzone() {
             {loading && (
               <div className="mt-4 w-full max-w-[320px]">
                 <div className="h-1.5 w-full rounded-full bg-hairline overflow-hidden"><div className="h-full bg-ink transition-all duration-700" style={{ width: `${progress}%` }} /></div>
-                <div className="mt-1 flex justify-between font-mono text-[10px] text-mute"><span>Extracting → classifying → enhancing</span><span>{progress}%</span></div>
+                <div className="mt-1 flex justify-between font-mono text-[10px] text-mute"><span>Reading → Structuring → Ready</span><span>{progress}%</span></div>
               </div>
             )}
             <div className="mt-4 flex gap-2" onClick={(e) => e.stopPropagation()}>
@@ -153,7 +153,7 @@ export function Dropzone() {
       </div>
 
       <div className="mt-3 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-[11px] text-mute">
-        <span>Free: {GUEST_DAILY_LIMIT}/day · Pro: 100/mo · <a href="#pricing" className="underline underline-offset-4 hover:text-ink">Pricing →</a></span>
+        <span>Free: {GUEST_DAILY_LIMIT}/day · No sign-up needed</span>
         <button onClick={handleSample} disabled={loading} className="underline underline-offset-4 hover:text-ink disabled:opacity-50">Need sample PDF? Try Sumit_Resume.pdf →</button>
       </div>
     </div>

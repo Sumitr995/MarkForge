@@ -1,4 +1,4 @@
-import { API_PUBLIC_URL, SITE_URL } from "@/lib/constants";
+import { API_PUBLIC_URL } from "@/lib/constants";
 import { Link } from "react-router-dom";
 
 export default function DocsPage() {
@@ -7,7 +7,7 @@ export default function DocsPage() {
       <div className="font-mono text-[11px] tracking-widest uppercase text-mute">Documentation</div>
       <h1 className="mt-2 font-mono text-[24px] font-bold text-ink">API & Product</h1>
       <p className="mt-2 font-mono text-[13px] leading-6 text-body max-w-2xl">
-        All routes under <code className="rounded border border-hairline bg-surface-card px-1">/api/v1</code>. One upload endpoint in MVP; more (auth, history, export) next. Base URL: <code className="rounded border border-hairline bg-surface-card px-1">{API_PUBLIC_URL}</code> (or <code className="rounded border border-hairline bg-surface-card px-1">{SITE_URL}/api</code> when same-origin).
+        One upload endpoint in beta. Base URL: <code className="rounded border border-hairline bg-surface-card px-1">{API_PUBLIC_URL}</code>.
       </p>
 
       <div className="mt-8 grid gap-6">
@@ -40,14 +40,14 @@ export default function DocsPage() {
         <div className="rounded-[4px] border border-hairline bg-canvas p-5">
           <h2 className="font-mono text-[13px] font-bold text-ink">Product guarantees</h2>
           <ul className="mt-2 space-y-1.5 font-mono text-[12.5px] leading-5 text-body list-disc pl-5 marker:text-mute">
-            <li>Your PDF is processed in a temp file and deleted in a <code className="bg-surface-card border border-hairline px-1 rounded">finally</code> block — never persisted.</li>
-            <li>No training on your data. Groq inference only.</li>
-            <li>You own the output: Markdown + assets. Copy, export, share.</li>
+            <li>Your PDF is processed once and deleted — never stored.</li>
+            <li>No training on your data. Your content is never reused.</li>
+            <li>You own the output: copy, export, and share freely.</li>
           </ul>
         </div>
 
         <div className="rounded-[4px] border border-hairline bg-surface-soft p-4 font-mono text-[12px] leading-5 text-body">
-          Frontend env: set <code className="bg-canvas border border-hairline px-1 rounded">VITE_API_URL</code> to your API origin (e.g. <code className="bg-canvas border border-hairline px-1 rounded">https://api.markforge.app</code>). Leave empty for same-origin <code className="bg-canvas border border-hairline px-1 rounded">/api</code> (Vite proxies <code className="bg-canvas border border-hairline px-1 rounded">/api → :5000</code> in dev). See <code className="bg-canvas border border-hairline px-1 rounded">.env.example</code>.
+          Point your app at the base URL above. Upload a PDF with a single file field named <code className="bg-canvas border border-hairline px-1 rounded">file</code>. See README for local setup.
         </div>
 
         <div className="text-center">

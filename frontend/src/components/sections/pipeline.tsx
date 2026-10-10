@@ -2,12 +2,12 @@ import { SectionLabel } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 
 const STEPS = [
-  { n: "01", title: "Upload", desc: "Drop PDF · 20 MB max · validated before disk.", tech: "Multer · PDF-only · uploads/temp" },
-  { n: "02", title: "Extract", desc: "MarkItDown parses locally. 0 tokens. Headings & tables intact.", tech: "Python → MarkItDown + PyMuPDF → JSON" },
-  { n: "03", title: "Split", desc: "Clean → 8000-char chunks. Cheap, fast, free-tier safe.", tech: "Preprocessor · 8000 chars" },
-  { n: "04", title: "Route", desc: "Groq classifies: paper / book / notes / docs. Picks 1 of 6 prompts.", tech: "Classifier → 6 prompts" },
-  { n: "05", title: "Enhance", desc: "Per-chunk Groq enhance, then stitch. Parallel & prompt-aware.", tech: "Groq llama-3.3-70b" },
-  { n: "06", title: "Read", desc: "Markdown + assets back. Copy / export. File already deleted.", tech: "ApiResponse · delete in finally" },
+  { n: "01", title: "Upload", desc: "Drop a PDF. Max 20 MB.", tech: "PDF only" },
+  { n: "02", title: "Extract", desc: "We read your PDF with tables and headings intact.", tech: "Accurate reading" },
+  { n: "03", title: "Split", desc: "Long docs split into parts for best results.", tech: "Long-doc safe" },
+  { n: "04", title: "Route", desc: "We detect your doc type and adjust automatically.", tech: "Automatic" },
+  { n: "05", title: "Enhance", desc: "Your content restructured for clarity.", tech: "AI enhance" },
+  { n: "06", title: "Read", desc: "Read, copy, or download. File already deleted.", tech: "Private" },
 ];
 
 export function Pipeline() {
@@ -39,7 +39,7 @@ export function Pipeline() {
 
       <div className="mt-6 rounded-[4px] border border-hairline bg-surface-soft p-3 flex gap-2 font-mono text-[11px] text-body">
         <span className="font-bold text-ink shrink-0">[→] Next:</span>
-        <span>Semantic chunking (heading-aware) so tables & sections never split. Today: clean \n\n join.</span>
+        <span>Tables and sections always stay together.</span>
       </div>
     </section>
   );

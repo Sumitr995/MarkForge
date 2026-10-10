@@ -4,38 +4,38 @@ import { motion } from "framer-motion";
 const FEATURES = [
   {
     bracket: "[+]",
-    title: "Zero-token extraction",
-    desc: "MarkItDown parses PDFs locally. No LLM cost for parsing. Tables & headings stay intact.",
-    meta: "MarkItDown · PyMuPDF · 0 tokens",
+    title: "Accurate reading",
+    desc: "Your PDF is read carefully. Tables and headings stay intact.",
+    meta: "Fast and accurate",
   },
   {
     bracket: "[+]",
     title: "Knows your doc type",
-    desc: "Research paper ≠ textbook. Groq classifies first, then picks 1 of 6 prompts. Right lens every time.",
-    meta: "6 prompts · auto routing",
+    desc: "Research paper or textbook — we adjust to your document automatically.",
+    meta: "Automatic",
   },
   {
     bracket: "[+]",
     title: "Built for long docs",
-    desc: "8000-char chunks. Fast, cheap, free-tier safe. Stitched back coherently.",
-    meta: "chunk → Groq → merge",
+    desc: "Long documents handled in parts, stitched back cleanly.",
+    meta: "Handles long docs",
   },
   {
     bracket: "[✓]",
     title: "Structure, not summary",
-    desc: "TOC, callouts, tables. Reads like Notion, not a ChatGPT dump. Nothing important dropped.",
-    meta: "markdown + assets → reader",
+    desc: "Contents, callouts, tables. Easy to read and revise. Nothing important dropped.",
+    meta: "Ready to read",
   },
   {
     bracket: "[✓]",
     title: "Private by default",
-    desc: "Temp file → process → deleted. No DB, no S3. Never persists.",
-    meta: "delete in finally",
+    desc: "Processed once, then deleted. Never stored.",
+    meta: "Private by design",
   },
   {
     bracket: "[→]",
     title: "What's next",
-    desc: "Image viewer, Mermaid, PDF export, flashcards. Assets pipeline already ready.",
+    desc: "Image viewer, PDF export, flashcards — coming soon.",
     meta: "Roadmap · /docs",
   },
 ];
@@ -95,8 +95,8 @@ export function Features() {
 
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { k: "Fig 1.", v: "0 tokens to parse", d: "MarkItDown is free; LLM sees only clean text" },
-          { k: "Fig 2.", v: "6 lenses", d: "One model, 6 prompts — no one-size-fits-all" },
+          { k: "Fig 1.", v: "Accurate reading", d: "Your layout preserved, ready to revise" },
+          { k: "Fig 2.", v: "Adapts to you", d: "Right format for your doc type" },
           { k: "Fig 3.", v: "You see everything", d: "Extracted vs enhanced — fully transparent" },
         ].map((s) => (
           <div key={s.k} className="rounded-[4px] border border-hairline bg-canvas p-4 hover:border-hairline-strong transition-colors">

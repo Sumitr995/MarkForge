@@ -43,7 +43,7 @@ export default function AppPage() {
           <span className="text-on-dark-mute"> — multipart/form-data · field: file · PDF · 20 MB</span>
         </div>
         <div className="mt-2 font-mono text-[11px] text-on-dark-mute">
-          Free beta: {GUEST_DAILY_LIMIT}/day per IP. Pro adds higher limits + API key. File is never stored.
+          Free beta: {GUEST_DAILY_LIMIT}/day. Files are deleted after processing.
         </div>
       </div>
     </div>

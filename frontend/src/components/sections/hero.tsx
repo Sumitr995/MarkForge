@@ -77,20 +77,20 @@ export function Hero() {
  ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝`}
           </pre>
           <div className="mt-6 font-mono text-[12px] tracking-widest uppercase text-on-dark-mute">
-            AI Markdown Distiller · Private beta
+            Private beta
           </div>
 
           <div className="mx-auto mt-6 max-w-2xl rounded-[4px] bg-surface-dark-elevated px-3 py-2.5 text-left font-mono text-[13px] flex items-center gap-2">
             <span className="text-ash">│</span>
             <span className="text-on-dark">Distill</span>
-            <span className="rounded-[4px] bg-white/10 px-1.5 py-0.5 text-[11px] text-on-dark">auto • research_paper</span>
+            <span className="rounded-[4px] bg-white/10 px-1.5 py-0.5 text-[11px] text-on-dark">automatic</span>
             <span className="text-on-dark-mute hidden sm:inline">→ TOC + callouts</span>
             <span className="ml-auto hidden sm:inline-flex h-4 w-px bg-white/20" />
             <span className="ml-auto sm:ml-0 text-ash text-[11px]">↵ run</span>
           </div>
 
           <div className="mx-auto mt-4 max-w-2xl text-left font-mono text-[11px] leading-5">
-            <div className="text-ash">$ markforge upload ./paper.pdf --enhance</div>
+            <div className="text-ash">Drop a PDF to start</div>
             <div className="text-on-dark-mute"><span className="text-success">[✓]</span> 42 pages → structured (12 sections, 9.2k words)</div>
             <div className="text-on-dark-mute"><span className="text-success">[✓]</span> figures & tables preserved</div>
             <div className="text-accent">→ ready to read · share · export</div>

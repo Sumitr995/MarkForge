@@ -3,12 +3,12 @@ import { SectionLabel } from "@/components/ui/badge";
 
 const FAQS = [
   { q: "Summarizer?", a: "No. We restructure, not shorten. Headings stay headings. Nothing dropped." },
-  { q: "Best PDFs?", a: "Papers, textbooks, notes, docs. Auto-classified → 1 of 6 prompts." },
-  { q: "Stored or trained on?", a: "Never. Temp file → deleted in finally. You own the output." },
-  { q: "Why not PDF → GPT directly?", a: "That costs ~30k tokens. We parse locally for 0, then enhance markdown only — 10× cheaper." },
-  { q: "Long docs?", a: "8000-char chunks. Free-tier safe. Semantic chunking (heading-aware) next." },
-  { q: "What do I get?", a: "Clean markdown + assets. Copy, download, or read with TOC. Images & PDF export next." },
-  { q: "Which AI?", a: "Groq llama-3.3-70b via Vercel AI SDK. Swap via GROQ_MODEL. OpenAI fallback ready." },
+  { q: "Best PDFs?", a: "Papers, textbooks, notes, and docs. We adjust to your document automatically." },
+  { q: "Stored or trained on?", a: "Never. Your file is deleted after processing. You own the output." },
+  { q: "Why not just upload to AI directly?", a: "We read your PDF first, then clean it up — faster and more accurate." },
+  { q: "Long docs?", a: "Yes. Long documents are handled in parts and stitched back together." },
+  { q: "What do I get?", a: "A clean document with contents, tables, and images. Copy, download, or read here." },
+  { q: "Which AI?", a: "Built-in AI that restructures your document. No setup needed." },
 ];
 
 export function FAQ() {
