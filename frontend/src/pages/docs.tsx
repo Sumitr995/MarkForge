@@ -34,7 +34,7 @@ export default function DocsPage() {
         <div className="rounded-[4px] border border-hairline bg-canvas p-5">
           <h2 className="font-mono text-[13px] font-bold text-ink">GET /api/v1/health</h2>
           <p className="mt-1 font-mono text-[12px] text-body">Liveness probe. No auth.</p>
-          <pre className="mt-3 rounded-[4px] bg-surface-card border border-hairline p-3 font-mono text-[11px] text-ink">{`GET ${API_PUBLIC_URL}/api/v1/health → { "success": true, "status": "OK" }`}</pre>
+          <pre className="mt-3 rounded-[4px] bg-surface-card border border-hairline p-3 font-mono text-[11px] text-ink">{`GET ${API_PUBLIC_URL}/api/v1/health → { "status": "ok" }`}</pre>
         </div>
 
         <div className="rounded-[4px] border border-hairline bg-canvas p-5">

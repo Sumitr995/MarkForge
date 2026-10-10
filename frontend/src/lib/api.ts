@@ -72,7 +72,6 @@ export async function uploadPdf(file: File, signal?: AbortSignal): Promise<Uploa
 export async function checkHealth(): Promise<boolean> {
   try {
     const res = await fetch(`${API_URL}/health`, { method: "GET" });
-    // health route has Zod bug requiring body, but we treat any 200-399 as ok
     return res.ok;
   } catch {
     return false;

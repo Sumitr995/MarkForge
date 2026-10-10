@@ -13,19 +13,9 @@ class AIService {
   async generateNotes(markdown: string) {
     const documentType = await documentClassifierService.classify(markdown);
 
-    console.log("DOCUMENT TYPE:", documentType);
-
     const cleanedMarkdown = markdownCleanerService.clean(markdown);
 
     const analysis = documentAnalyzerService.analyze(cleanedMarkdown);
-
-    console.log("ANALYSIS:", {
-      title: analysis.title,
-      headings: analysis.headingCount,
-      tables: analysis.tableCount,
-      images: analysis.imageCount,
-      tokens: analysis.estimatedTokens,
-    });
 
     const chunks = chunkService.createChunks(cleanedMarkdown);
 

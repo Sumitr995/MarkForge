@@ -84,7 +84,7 @@ class MarkdownService {
         },
       );
 
-      if (stderr) console.error("PYTHON STDERR:", stderr);
+      if (stderr) console.error("PDF conversion produced warnings");
 
       const result = JSON.parse(stdout);
 
@@ -97,9 +97,8 @@ class MarkdownService {
         assets: result.assets ?? [],
       };
     } catch (error: any) {
-      console.error("MARKDOWN ERROR:", error);
-      if (error?.stderr) console.error("PYTHON STDERR:", error.stderr);
-      if (error?.stdout) console.error("PYTHON STDOUT:", error.stdout);
+      // Log server-side without leaking paths or subprocess output to the client.
+      console.error("PDF conversion failed");
 
       throw new ApiError(
         500,

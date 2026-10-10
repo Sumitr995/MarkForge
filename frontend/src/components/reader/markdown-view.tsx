@@ -1,6 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import rehypeSanitize from "rehype-sanitize";
 import "highlight.js/styles/github.css";
 
 function slug(text: string) {
@@ -23,7 +24,7 @@ export function MarkdownView({ markdown }: { markdown: string }) {
     <article className="prose-mono max-w-none scroll-mt-20">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight]}
+        rehypePlugins={[rehypeSanitize, rehypeHighlight]}
         components={{
           h1: ({ children, ...props }) => {
             const id = headingId(children);

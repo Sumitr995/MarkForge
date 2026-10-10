@@ -11,21 +11,22 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.4.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.0.0",
     "gsap": "^3.12.5",
-    "motion": "^12.0.0",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.0.2",
-    "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.475.0",
+    "motion": "^12.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-markdown": "^9.0.3",
-    "remark-gfm": "^4.0.1",
+    "react-router-dom": "^7.4.0",
     "rehype-highlight": "^7.0.2",
-    "zustand": "^5.0.3",
-    "sonner": "^2.0.1"
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "sonner": "^2.0.1",
+    "tailwind-merge": "^3.0.2",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.5",

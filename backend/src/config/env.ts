@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import path from "path";
+import { z } from "zod";
 
 // Load env in order: .env -> .env.local / .env.production
 // dotenv by default loads .env only — Next.js-style .env.local/.env.production are NOT auto-loaded in Express
@@ -15,7 +16,6 @@ dotenv.config({
 });
 
 // 3) for local dev, also try .env.local explicitly when NODE_ENV=development
-// (so `NODE_ENV=development` loads .env -> .env.development -> .env.local)
 if (nodeEnv === "development") {
   dotenv.config({
     path: path.resolve(process.cwd(), ".env.local"),
@@ -23,17 +23,45 @@ if (nodeEnv === "development") {
   });
 }
 
-export const env = {
-  PORT: Number(process.env.PORT) || 5000,
-  NODE_ENV: process.env.NODE_ENV || "development",
-  DATABASE_URL: process.env.DATABASE_URL || "",
-  GROQ_API_KEY: process.env.GROQ_API_KEY || "",
-  GROQ_MODEL: process.env.GROQ_MODEL || "openai/gpt-oss-120b",
-  OPENAI_API_KEY: process.env.OPENAI_API_KEY || "",
-  PYTHON_PATH: process.env.PYTHON_PATH || "",
-  // Optional override for convert.py location — useful in Docker where layout differs
-  PYTHON_SCRIPT: process.env.PYTHON_SCRIPT || "",
-  ASSETS_DIR: process.env.ASSETS_DIR || "",
-  BACKEND_URL: process.env.BACKEND_URL || "",
-  ASSET_RETENTION_MS: Number(process.env.ASSET_RETENTION_MS) || 24 * 60 * 60 * 1000, // 24h — keep extracted images readable for a day
-};
+const envSchema = z.object({
+  PORT: z.coerce.number().int().min(1).max(65535).default(5000),
+  NODE_ENV: z
+    .enum(["development", "test", "production"])
+    .default("development"),
+  GROQ_API_KEY: z.string().optional().default(""),
+  GROQ_MODEL: z.string().min(1).default("openai/gpt-oss-120b"),
+  OPENAI_API_KEY: z.string().optional().default(""),
+  PYTHON_PATH: z.string().optional().default(""),
+  PYTHON_SCRIPT: z.string().optional().default(""),
+  ASSETS_DIR: z.string().optional().default(""),
+  BACKEND_URL: z.string().optional().default(""),
+  FRONTEND_ORIGIN: z.string().optional().default(""),
+  ASSET_RETENTION_MS: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(24 * 60 * 60 * 1000),
+  MAX_FILE_SIZE_MB: z.coerce.number().int().min(1).max(100).default(20),
+});
+
+export type Env = z.infer<typeof envSchema>;
+
+function loadEnv(): Env {
+  const parsed = envSchema.safeParse(process.env);
+  if (!parsed.success) {
+    const details = parsed.error.issues
+      .map((i) => `${i.path.join(".")}: ${i.message}`)
+      .join("; ");
+    throw new Error(`Invalid environment configuration: ${details}`);
+  }
+  const env = parsed.data;
+  // Fail fast in production when secrets are missing.
+  if (env.NODE_ENV === "production" && !env.GROQ_API_KEY) {
+    throw new Error(
+      "Invalid environment configuration: GROQ_API_KEY is required in production",
+    );
+  }
+  return env;
+}
+
+export const env: Env = loadEnv();
