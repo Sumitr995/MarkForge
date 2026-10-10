@@ -13,7 +13,7 @@ export default function ContactPage() {
           className="rounded-[4px] border border-hairline bg-canvas p-4 hover:border-hairline-strong transition-colors"
         >
           <div className="font-mono text-[12px] font-bold text-ink">Email</div>
-          <div className="mt-1 font-mono text-[13px] text-body">support@markforge.app</div>
+          <div className="mt-1 font-mono text-[13px] text-body">itzsumitr995@gmail.com</div>
           <div className="mt-1 font-mono text-[11px] text-mute">Fastest for privacy and deletion requests.</div>
         </a>
         <a
