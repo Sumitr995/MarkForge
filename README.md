@@ -206,6 +206,8 @@ PYTHON_PATH=              # auto: ../python/.venv/bin/python → /usr/local/bin/
 PYTHON_SCRIPT=            # auto: ../python/scripts/convert.py → /app/python/scripts/convert.py
 ASSETS_DIR=               # default: uploads/assets → /app/backend/uploads/assets
 BACKEND_URL=http://localhost:5000 # prod: https://markforge.onrender.com (asset base)
+FRONTEND_ORIGIN=          # single extra origin allowed via CORS (empty = localhost + prod defaults)
+MAX_FILE_SIZE_MB=20       # server-enforced upload cap (magic-bytes verified)
 ASSET_RETENTION_MS=86400000
 ```
 
@@ -240,8 +242,12 @@ curl -X POST https://markforge.onrender.com/api/v1/documents/upload -F file=@/tm
 
 # Health
 curl https://markforge.onrender.com/api/v1/health
-# → { "success": true, "status": "OK" }
+# → { "status": "ok" }
 ```
+
+Limits: PDF only (verified by magic bytes), 20 MB max. General API: 100 req / 15 min per IP. Upload: 20 / hour per IP. Errors return a `requestId` — no stack traces or paths are sent to clients.
+
+Legal: `/terms`, `/privacy`, `/contact` (footer + upload screen). Upload requires accepting Terms & Privacy. Drafts — TODO: needs legal review.
 
 | Field | Constraint |
 |---|---|
