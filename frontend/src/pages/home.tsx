@@ -1,5 +1,5 @@
 import { Hero } from "@/components/sections/hero";
-import { Features } from "@/components/sections/features";
+import { Bento } from "@/components/sections/bento";
 import { WhyMarkItDown } from "@/components/sections/why-markitdown";
 import { Pipeline } from "@/components/sections/pipeline";
 import { Who } from "@/components/sections/who";
@@ -14,7 +14,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Features />
+      <Bento />
       <WhyMarkItDown />
       <Pipeline />
       <Who />
